@@ -4,6 +4,7 @@ import view.Console;
 
 public class Help extends Command {
     private Console wiev;
+    private String [] commandArray;
     private String line = "_____________________________________________________________________";
 
     public Help(Console wiev){
@@ -16,8 +17,8 @@ public class Help extends Command {
                 "\nAvailable commands:" +
                 "\n" + line);
 
-        for (int i = 0; i < MainController.commands.length; i++) {
-            wiev.write(MainController.commands[i].description());
+        for (int i = 0; i < commandArray.length; i++) {
+            wiev.write(commandArray[i]);
             wiev.write(line);
         }
     }
@@ -31,5 +32,13 @@ public class Help extends Command {
     @Override
     protected String description() { // TODO
         return "'help' - to read help";
+    }
+
+    public void addCommands(Command [] commands){
+        String [] command = new String[commands.length];
+        for (int i = 0; i < commands.length; i++) {
+            command[i] = commands[i].description();
+        }
+        this.commandArray =  command;
     }
 }

@@ -33,6 +33,7 @@ public class MainController {
         DBManager dbManager = new DBManager(connection, workParameters);
         connection = connection(dbManager);
 
+        Help help = new Help(wiev);
         commands = new Command[]{
                 new List(dbManager, workParameters, wiev),
                 new DBManager.Find(dbManager, workParameters, wiev),
@@ -40,8 +41,9 @@ public class MainController {
                 new Update(dbManager, workParameters, wiev),
                 new Delete(dbManager, workParameters, wiev),
                 new Clear(dbManager, workParameters, wiev),
-                new Help(wiev),
+                help,
                 new Exit(wiev)};
+        help.addCommands(commands);
 
         String command;
 
