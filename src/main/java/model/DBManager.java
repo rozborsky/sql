@@ -12,7 +12,6 @@ public class DBManager {
     private Connection connection;
     private String url;
     private String database;
-    private String table;
     private String user;
     private String password;
     Map workParameters;
@@ -22,7 +21,6 @@ public class DBManager {
         this.connection = connection;
         this.url = (String)workParameters.get("propertyUrl");
         this.database = (String)workParameters.get("DBName");
-        this.table = (String)workParameters.get("table");
         this.user = (String) workParameters.get("userName");
         this.password = (String) workParameters.get("password");
     }

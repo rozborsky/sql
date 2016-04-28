@@ -42,6 +42,6 @@ public class Update extends Insert {
 
     @Override
     protected String description() {
-        return "'update' - to update current tableParameters";
+        return "'update' - to update current table";
     }
 }
