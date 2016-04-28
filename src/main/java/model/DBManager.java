@@ -1,8 +1,6 @@
 package model;
 
-import controller.Command;
 import controller.TableParameters;
-import view.Console;
 
 import java.sql.*;
 import java.util.Map;
@@ -17,23 +15,26 @@ public class DBManager {
     private String table;
     private String user;
     private String password;
+    Map workParameters;
 
     public DBManager(Connection connection, Map workParameters){
+        this.workParameters = workParameters;
         this.connection = connection;
         this.url = (String)workParameters.get("propertyUrl");
-        this.database = (String)workParameters.get("DB_name");
+        this.database = (String)workParameters.get("DBName");
         this.table = (String)workParameters.get("table");
-        this.user = (String) workParameters.get("user_name");
+        this.user = (String) workParameters.get("userName");
         this.password = (String) workParameters.get("password");
     }
 
-    public boolean connection() throws SQLException{
+    public Connection connection(Connection connection) throws SQLException{
         if (connection != null){
-            connection = null;
+            this.connection = null;
         }
         try{
-            this.connection = DriverManager.getConnection(url + database, user, password);
-            return true;
+            connection = DriverManager.getConnection(url + database, user, password);
+            this.connection = connection;
+            return connection;
         } catch (SQLException e){
             throw  e;
         }
@@ -41,25 +42,26 @@ public class DBManager {
 
     public boolean clear() throws SQLException{
         try(Statement statement = connection.createStatement()){
-            statement.executeUpdate("DELETE FROM " + database + "." + table);
+            statement.executeUpdate("DELETE FROM " + database + "." + workParameters.get("table"));
             return true;
         }catch (SQLException e){
             throw  e;
         }
     }
 
-    public boolean delete(TableParameters table, String command) throws SQLException {
+    public boolean delete(TableParameters tableParameters, String command) throws SQLException {
         try(Statement statement = connection.createStatement()){
-            statement.executeUpdate("DELETE FROM " + database + "." + table + " WHERE " + table.getColumns() + " = " + command);
+            statement.executeUpdate("DELETE FROM " + database + "." + workParameters.get("table") + " WHERE " + tableParameters.getColumns()[0] + " = " + command);
             return true;
         } catch (SQLException e){
+            System.out.println("del");
             throw e;
         }
     }
 
     public boolean insert(String enteredValues, String columns) throws SQLException {
         try(Statement statement = connection.createStatement()){
-            statement.executeUpdate("INSERT INTO " + database + "." + table + " (" + columns + ") " +
+            statement.executeUpdate("INSERT INTO " + database + "." + workParameters.get("table") + " (" + columns + ") " +
                     "VALUES ('" + enteredValues + "')");
             return true;
         }catch (SQLException e){
@@ -67,13 +69,13 @@ public class DBManager {
         }
     }
 
-    public boolean update(String idColunm, String changedColumns, TableParameters table, String [] enteredData) throws SQLException {
-        try(PreparedStatement statement = connection.prepareStatement("UPDATE " + database + "." + table +
+    public boolean update(String idColunm, String changedColumns, TableParameters tableParameters, String [] enteredData) throws SQLException {
+        try(PreparedStatement statement = connection.prepareStatement("UPDATE " + database + "." + workParameters.get("table") +
                 " SET " + changedColumns + " = ? WHERE " + idColunm)){
             int j;
-            for (int i = 0; i < table.getWidth(); i++) {
+            for (int i = 0; i < tableParameters.getWidth(); i++) {
                 if (i == 0){
-                    j = table.getWidth();
+                    j = tableParameters.getWidth();
                 }
                 else{
                     j = i;
@@ -94,7 +96,7 @@ public class DBManager {
     }
 
     public boolean isExists(int id){
-        try(PreparedStatement statement = connection.prepareStatement("SELECT name FROM " + database + "." + table +
+        try(PreparedStatement statement = connection.prepareStatement("SELECT name FROM " + database + "." + workParameters.get("table") +
                 " WHERE id=" + id)){
             try(ResultSet resultSet = statement.executeQuery()){
                 if (resultSet.next()){
@@ -139,7 +141,7 @@ public class DBManager {
         int columns;
         try(Statement statement = connection.createStatement();
             ResultSet countColumns = statement.executeQuery("SELECT COUNT(*) FROM information_schema.columns " +
-                    "WHERE table_schema = 'public' AND table_name   = '" + table + "'")){
+                    "WHERE table_schema = 'public' AND table_name   = '" + workParameters.get("table") + "'")){
             countColumns.next();
             columns = countColumns.getInt(1);
             return columns;
@@ -151,7 +153,7 @@ public class DBManager {
     public int tableHight() throws SQLException {
         int rows;
         try(Statement statement = connection.createStatement();
-            ResultSet countRows = statement.executeQuery("SELECT COUNT(*) FROM " + database + "." + table)){
+            ResultSet countRows = statement.executeQuery("SELECT COUNT(*) FROM " + database + "." + workParameters.get("table"))){
             countRows.next();
             rows = countRows.getInt(1);
             return rows;
@@ -164,7 +166,7 @@ public class DBManager {
         String [] columns  = new String[width];
         try(Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT column_name FROM information_schema.columns " +
-                    "WHERE table_schema = 'public' AND table_name = '" + table + "'")){
+                    "WHERE table_schema = 'public' AND table_name = '" + workParameters.get("table") + "'")){
             int i = 0;
             while(resultSet.next()){
                 columns[i++] = resultSet.getString(1);
@@ -174,18 +176,18 @@ public class DBManager {
             throw e;
         }
     }
-    public String [] find(TableParameters table) throws SQLException {
-        String [] rows = new String[table.getHeigth()];
+    public String [] find(TableParameters tableParameters) throws SQLException {
+        String [] rows = new String[tableParameters.getHeigth()];
         try (Statement statement = connection.createStatement();
-             ResultSet result = statement.executeQuery("SELECT * FROM " + database + "." + table +
-                     " ORDER BY " + table.getColumns()[0])) {
+             ResultSet result = statement.executeQuery("SELECT * FROM " + database + "." + workParameters.get("table") +
+                     " ORDER BY " + tableParameters.getColumns()[0])) {
             String row;
             int numerOfRow = 0;
             while (result.next()) {
                 row = "";
-                for (int i = 1; i <= table.getWidth(); i++) {
+                for (int i = 1; i <= tableParameters.getWidth(); i++) {
                     row += result.getString(i);
-                    if (i < table.getWidth()){
+                    if (i < tableParameters.getWidth()){
                         row += "|";
                     }
                 }
@@ -194,66 +196,6 @@ public class DBManager {
             return rows;
         } catch (SQLException e) {
             throw e;
-        }
-    }
-
-    public static class Find extends Command {
-        private Console wiev;
-        private Map workParameters;
-        private DBManager dbManager;
-        private String line = "_____________________________________________________________________";
-
-        public Find(DBManager dbManager,  Map workParameters, Console wiev){
-            this.dbManager = dbManager;
-            this.workParameters = workParameters;
-            this.wiev = wiev;
-        }
-
-        @Override
-        protected String format() {
-            String command = "find";
-            return command;
-        }
-
-        @Override
-        public void process() {
-            TableParameters table = new TableParameters(dbManager, wiev);
-            int numberOfRows = table.getHeigth();
-            String [] rows;
-
-            if (numberOfRows != 0) {
-                wiev.write("\n\n" + line);
-                wiev.write((String)  workParameters.get("table"));
-                wiev.write(line);
-                try {
-                    rows = dbManager.find(table);
-                    for (int i = 0; i < rows.length; i++) {
-                        wiev.write(formatRow(rows[i]));
-                        wiev.write(line);
-                    }
-                }catch (SQLException e){
-                    wiev.error("Cant show table '" + workParameters.get("table") + "' ", e);
-                }
-
-            }else{
-                wiev.write("\n\n" + line);
-                wiev.write("table '" + workParameters.get("table") + "' isExists empty");
-                wiev.write(line);
-            }
-        }
-
-        private String formatRow(String value){
-            String [] part = value.split("\\|");
-            String row = "";
-            for (int i = 0; i < part.length; i++) {
-                row += String.format("%-21s",part[i]);;
-            }
-            return row;
-        }
-
-        @Override
-        protected String description() {
-            return "'find' - to obtain the contents of the current table";
         }
     }
 }

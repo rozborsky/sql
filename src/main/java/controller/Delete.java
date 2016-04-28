@@ -9,12 +9,12 @@ import java.util.Map;
 public class Delete extends Command {
     private Console wiev;
     private DBManager dbManager;
-    private String tablename;
+    private Map workParameters;
 
     public Delete(DBManager dbManager, Map workParameters, Console wiev){
         this.dbManager = dbManager;
+        this.workParameters = workParameters;
         this.wiev = wiev;
-        this.tablename = (String) workParameters.get("table");
     }
 
     @Override
@@ -22,7 +22,7 @@ public class Delete extends Command {
         TableParameters table = new TableParameters(dbManager, wiev);
         String command;
         if (table.getColumns().length == 0){
-            wiev.write("Table " + tablename + " isExists empty");
+            wiev.write("Table " + workParameters.get("table") + " is empty");
             return;
         }
         else{

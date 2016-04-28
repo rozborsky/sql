@@ -9,11 +9,11 @@ import java.util.Map;
 public class Clear extends Command {
     private Console wiev;
     private DBManager dbManager;
-    private String table;
+    Map workParameters;
 
     public Clear(DBManager dbManager, Map workParameters, Console wiev){
         this.dbManager = dbManager;
-        this.table = (String)workParameters.get("table");
+        this.workParameters = workParameters;
         this.wiev = wiev;
     }
 
@@ -21,16 +21,16 @@ public class Clear extends Command {
     public void process() {
         String command;
         do {
-            wiev.write("Are you sure you want to clear the table '" + table + "'? Yes - press 'y',"
+            wiev.write("Are you sure you want to clear the table '" + workParameters.get("table") + "'? Yes - press 'y',"
                     + " no - press 'n'");
             command = wiev.read();
             if (command.equals("y")){
                 try{
                     if (dbManager.clear()) {
-                        wiev.write("Table '" + table + "' was cleared");
+                        wiev.write("Table '" + workParameters.get("table") + "' was cleared");
                     }
                 }catch (SQLException e){
-                    wiev.error(String.format("Can't clear table %s", table), e);
+                    wiev.error(String.format("Can't clear table %s", workParameters.get("table")), e);
                 }
             }
         }while (!"n".equals(command) && !"back".equals(command));

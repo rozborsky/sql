@@ -2,6 +2,7 @@ package controller;
 
 
 public abstract class Command {
+
     public boolean canProcess(String enteredCommand){
         return format().equals(enteredCommand);
     }

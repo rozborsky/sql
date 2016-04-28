@@ -14,9 +14,8 @@ public class Insert extends Command {
     protected String message = "Insert";
     protected String [] enteredData;
     protected String dbName;
-    protected String tableName;
     protected DBManager dbManager;
-    protected TableParameters table;
+    protected TableParameters tableParameters;
     protected Map workParameters;
 
     public Insert(DBManager dbManager, Map workParameters, Console wiev){
@@ -27,14 +26,12 @@ public class Insert extends Command {
 
     @Override
     public void process() {
-        this.dbName = (String) workParameters.get("DB_name");
-        this.tableName = (String)  workParameters.get("table");
-        table = new TableParameters(dbManager, wiev );
+        this.dbName = (String) workParameters.get("DBName");
+        tableParameters = new TableParameters(dbManager, wiev );
 
-        String showColumns = columns(table.getColumns(), "|");
-
-        if (table.getWidth() == 0){
-            wiev.write("Table '" + tableName + "' has't columns. You cant work with table");
+        String showColumns = columns(tableParameters.getColumns(), "|");
+        if (tableParameters.getWidth() == 0){
+            wiev.write("Table '" + workParameters.get("table") + "' has't columns. You cant work with table");
         }
         else {
             insert_data(wiev, showColumns);
@@ -59,20 +56,20 @@ public class Insert extends Command {
                 wiev.write("Insert correct id");
             }
 
-        String columns = columns(table.getColumns(), ", ");
+        String columns = columns(tableParameters.getColumns(), ", ");
         String enteredValues = columns(enteredData, "', '");
 
         request(enteredValues, columns);
-        }while((enteredData.length != table.getWidth()) || enteredData[0].equals("back"));
+        }while((enteredData.length != tableParameters.getWidth()) || enteredData[0].equals("back"));
     }
 
     protected void request(String enteredValues, String columns) {
         try{
             if(dbManager.insert(enteredValues, columns)){
-                wiev.write(String.format("\nTable %s was updated", tableName));
+                wiev.write(String.format("\nTable %s was updated", workParameters.get("table")));
             }
         }catch (SQLException e){
-            wiev.error("Can't insert values into the '" + tableName + "' ", e);
+            wiev.error("Can't insert values into the '" + workParameters.get("table") + "' ", e);
         }
 
     }
