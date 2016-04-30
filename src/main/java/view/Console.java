@@ -3,18 +3,16 @@ package view;
 import java.util.Scanner;
 
 public class Console {
-    public void write(String message){
+    public void write(String message) {
         System.out.println(message);
     }
 
-    public void error(String message, Exception e) {
-        System.out.println(String.format(message + e));
+    public void error(String message, Exception exception) {
+        System.out.println(String.format(message + exception));
     }
 
-    public  String read(){
-        String line;
+    public String read() {
         Scanner scanner = new Scanner(System.in);
-        line = scanner.nextLine();
-        return line;
+        return scanner.nextLine();
     }
 }

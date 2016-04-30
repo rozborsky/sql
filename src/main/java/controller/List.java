@@ -1,5 +1,6 @@
 package controller;
 
+import model.DBManager;
 import view.*;
 
 import java.util.Map;
@@ -10,19 +11,18 @@ import java.util.Map;
 public class List extends Command {
 
     private String[] tables;
-    private String dbName;
-    private Console wiev;
+    DBManager manager;
+    private Console view;
 
-    public List(Map workParameters, String[] tables, Console wiev){
-        this.dbName = (String)workParameters.get("DBName");
+    public List(DBManager manager, String[] tables, Console view){
+        this.manager = manager;
         this.tables = tables;
-        this.wiev = wiev;
+        this.view = view;
     }
 
     @Override
     protected String format() {
-        String command = "list";
-        return command;
+        return "list";
     }
 
     @Override
@@ -32,7 +32,7 @@ public class List extends Command {
 
     private void showTables(){
         if (tables.length == 0){
-            wiev.write("\nDatabase '" + dbName + "' hasn't tables");
+            view.write("\nDatabase '" + manager.getDatabase() + "' hasn't tables");
         }
         else{
             String tableList = "[";
@@ -43,8 +43,8 @@ public class List extends Command {
                 }
             }
             tableList += "]\n";
-            wiev.write("\nAvailable tables:");
-            wiev.write(tableList);
+            view.write("\nAvailable tables:");
+            view.write(tableList);
         }
     }
 

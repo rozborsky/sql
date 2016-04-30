@@ -3,30 +3,29 @@ package controller;
 import view.Console;
 
 public class Help extends Command {
-    private Console wiev;
+    private Console view;
     private String [] commandArray;
     private String line = "_____________________________________________________________________";
 
-    public Help(Console wiev){
-        this.wiev = wiev;
+    public Help(Console view){
+        this.view = view;
     }
     @Override
     public void process() {
-        wiev.write("\n\n" + line +
+        view.write("\n\n" + line +
                 "\nHELP" +
                 "\nAvailable commands:" +
                 "\n" + line);
 
         for (int i = 0; i < commandArray.length; i++) {
-            wiev.write(commandArray[i]);
-            wiev.write(line);
+            view.write(commandArray[i]);
+            view.write(line);
         }
     }
 
     @Override
     protected String format() {
-        String command = "help";
-        return command;
+        return "help";
     }
 
     @Override

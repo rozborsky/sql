@@ -10,7 +10,7 @@ import java.util.Map;
  * Created by roman on 18.03.2016.
  */
 public class Insert extends Command {
-    protected Console wiev;
+    protected Console view;
     protected String message = "Insert";
     protected String [] enteredData;
     protected String dbName;
@@ -18,23 +18,23 @@ public class Insert extends Command {
     protected TableParameters tableParameters;
     protected Map workParameters;
 
-    public Insert(DBManager dbManager, Map workParameters, Console wiev){
+    public Insert(DBManager dbManager, Map workParameters, Console view){
         this.workParameters = workParameters;
-        this.wiev = wiev;
+        this.view = view;
         this.dbManager = dbManager;
     }
 
     @Override
     public void process() {
         this.dbName = (String) workParameters.get("DBName");
-        tableParameters = new TableParameters(dbManager, wiev );
+        tableParameters = new TableParameters(dbManager, view);
 
         String showColumns = columns(tableParameters.getColumns(), "|");
         if (tableParameters.getWidth() == 0){
-            wiev.write("Table '" + workParameters.get("table") + "' has't columns. You cant work with table");
+            view.write("Table '" + workParameters.get("table") + "' has't columns. You cant work with table");
         }
         else {
-            insert_data(wiev, showColumns);
+            insert_data(view, showColumns);
         }
     }
 
@@ -66,10 +66,10 @@ public class Insert extends Command {
     protected void request(String enteredValues, String columns) {
         try{
             if(dbManager.insert(enteredValues, columns)){
-                wiev.write(String.format("\nTable %s was updated", workParameters.get("table")));
+                view.write(String.format("\nTable %s was updated", workParameters.get("table")));
             }
         }catch (SQLException e){
-            wiev.error("Can't insert values into the '" + workParameters.get("table") + "' ", e);
+            view.error("Can't insert values into the '" + workParameters.get("table") + "' ", e);
         }
 
     }
@@ -87,8 +87,7 @@ public class Insert extends Command {
 
     @Override
     protected String format() {
-        String command = "insert";
-        return command;
+        return "insert";
     }
 
     @Override

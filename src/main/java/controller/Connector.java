@@ -14,44 +14,47 @@ import java.util.Properties;
  */
 public class Connector {
 
-    private String propertyUrl = null;
+    private String url = null;
 
-    public Connection create (Connection connection, Map workParameters, Console wiev){
-        Properties property = new Properties();
-        InputStream input = getClass().getClassLoader().getResourceAsStream("config.properties");
+    public DBManager create (Console view){
+
+        url = getUrl(view);
+
         boolean isConnect = false;
+        DBManager dbManager = null;
+        do{
+            view.write("\nFor the database connection, enter the information in the format 'database_name|user_name|password'");
+            String [] insertedValues;
+            insertedValues = view.read().split("\\|");
+            if (insertedValues.length != 3){
+                continue;
+            }
+            String database = insertedValues[0];
+            String userName = insertedValues[1];
+            String password = insertedValues[2];
 
+            dbManager = new DBManager(database, userName, password, url);
+            try{
+                dbManager.connection();
+                view.write(String.format("\nConnect to the database '%s' succesful\n", database));
+                isConnect = true;
+            }catch (SQLException e){
+                view.error(String.format("\nCan't connect to the database '%s' \n", database), e);
+                view.write("\n");
+            }
+        }while(!isConnect);
+        return dbManager;
+    }
+
+    private String getUrl(Console wiev) {
+        InputStream input = getClass().getClassLoader().getResourceAsStream("config.properties");
+        Properties property = new Properties();
         try{
             property.load(input);
         }catch (Exception e){
             wiev.error("Can't find property file ", e);
             System.exit(0);
         }
-
-        this.propertyUrl = property.getProperty("url");
-
-        do{
-            wiev.write("\nFor the database connection, enter the information in the format 'database_name|user_name|password'");
-            String [] insertedValues;
-            insertedValues = wiev.read().split("\\|");
-            if (insertedValues.length != 3){
-                continue;
-            }
-            workParameters.put("DBName", insertedValues[0]);
-            workParameters.put("userName", insertedValues[1]);
-            workParameters.put("password", insertedValues[2]);
-            workParameters.put("propertyUrl", propertyUrl);
-
-            DBManager dbManager = new DBManager(connection, workParameters);
-            try{
-                connection = dbManager.connection(connection);
-                wiev.write(String.format("\nConnect to the database '%s' succesful\n", workParameters.get("DBName")));
-                isConnect = true;
-            }catch (SQLException e){
-                wiev.error(String.format("\nCan't connect to the database '%s' \n", workParameters.get("DBName")), e);
-                wiev.write("\n");
-            }
-        }while(isConnect == false);
-        return connection;
+        return property.getProperty("url");
     }
 }

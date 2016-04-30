@@ -12,25 +12,23 @@ public class DBManager {
     private Connection connection;
     private String url;
     private String database;
-    private String user;
+    private String userName;
     private String password;
-    Map workParameters;
+    private String table = null;
 
-    public DBManager(Connection connection, Map workParameters){
-        this.workParameters = workParameters;
-        this.connection = connection;
-        this.url = (String)workParameters.get("propertyUrl");
-        this.database = (String)workParameters.get("DBName");
-        this.user = (String) workParameters.get("userName");
-        this.password = (String) workParameters.get("password");
+    public DBManager(String database, String userName, String password, String url) {
+        this.database = database;
+        this.userName = userName;
+        this.password = password;
+        this.url = url;
     }
 
-    public Connection connection(Connection connection) throws SQLException{
+    public Connection connection() throws SQLException{
         if (connection != null){
             this.connection = null;
         }
         try{
-            connection = DriverManager.getConnection(url + database, user, password);
+            connection = DriverManager.getConnection(url + database, userName, password);
             this.connection = connection;
             return connection;
         } catch (SQLException e){
@@ -40,7 +38,7 @@ public class DBManager {
 
     public boolean clear() throws SQLException{
         try(Statement statement = connection.createStatement()){
-            statement.executeUpdate("DELETE FROM " + database + "." + workParameters.get("table"));
+            statement.executeUpdate("DELETE FROM " + database + "." + table);
             return true;
         }catch (SQLException e){
             throw  e;
@@ -49,7 +47,7 @@ public class DBManager {
 
     public boolean delete(TableParameters tableParameters, String command) throws SQLException {
         try(Statement statement = connection.createStatement()){
-            statement.executeUpdate("DELETE FROM " + database + "." + workParameters.get("table") + " WHERE " + tableParameters.getColumns()[0] + " = " + command);
+            statement.executeUpdate("DELETE FROM " + database + "." + table + " WHERE " + tableParameters.getColumns()[0] + " = " + command);
             return true;
         } catch (SQLException e){
             System.out.println("del");
@@ -59,7 +57,7 @@ public class DBManager {
 
     public boolean insert(String enteredValues, String columns) throws SQLException {
         try(Statement statement = connection.createStatement()){
-            statement.executeUpdate("INSERT INTO " + database + "." + workParameters.get("table") + " (" + columns + ") " +
+            statement.executeUpdate("INSERT INTO " + database + "." + table + " (" + columns + ") " +
                     "VALUES ('" + enteredValues + "')");
             return true;
         }catch (SQLException e){
@@ -68,7 +66,7 @@ public class DBManager {
     }
 
     public boolean update(String idColunm, String changedColumns, TableParameters tableParameters, String [] enteredData) throws SQLException {
-        try(PreparedStatement statement = connection.prepareStatement("UPDATE " + database + "." + workParameters.get("table") +
+        try(PreparedStatement statement = connection.prepareStatement("UPDATE " + database + "." + table +
                 " SET " + changedColumns + " = ? WHERE " + idColunm)){
             int j;
             for (int i = 0; i < tableParameters.getWidth(); i++) {
@@ -94,7 +92,7 @@ public class DBManager {
     }
 
     public boolean isExists(int id){
-        try(PreparedStatement statement = connection.prepareStatement("SELECT name FROM " + database + "." + workParameters.get("table") +
+        try(PreparedStatement statement = connection.prepareStatement("SELECT name FROM " + database + "." + table +
                 " WHERE id=" + id)){
             try(ResultSet resultSet = statement.executeQuery()){
                 if (resultSet.next()){
@@ -139,7 +137,7 @@ public class DBManager {
         int columns;
         try(Statement statement = connection.createStatement();
             ResultSet countColumns = statement.executeQuery("SELECT COUNT(*) FROM information_schema.columns " +
-                    "WHERE table_schema = 'public' AND table_name   = '" + workParameters.get("table") + "'")){
+                    "WHERE table_schema = 'public' AND table_name   = '" + table + "'")){
             countColumns.next();
             columns = countColumns.getInt(1);
             return columns;
@@ -151,7 +149,7 @@ public class DBManager {
     public int tableHight() throws SQLException {
         int rows;
         try(Statement statement = connection.createStatement();
-            ResultSet countRows = statement.executeQuery("SELECT COUNT(*) FROM " + database + "." + workParameters.get("table"))){
+            ResultSet countRows = statement.executeQuery("SELECT COUNT(*) FROM " + database + "." + table)){
             countRows.next();
             rows = countRows.getInt(1);
             return rows;
@@ -164,7 +162,7 @@ public class DBManager {
         String [] columns  = new String[width];
         try(Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT column_name FROM information_schema.columns " +
-                    "WHERE table_schema = 'public' AND table_name = '" + workParameters.get("table") + "'")){
+                    "WHERE table_schema = 'public' AND table_name = '" + table + "'")){
             int i = 0;
             while(resultSet.next()){
                 columns[i++] = resultSet.getString(1);
@@ -177,7 +175,7 @@ public class DBManager {
     public String [] find(TableParameters tableParameters) throws SQLException {
         String [] rows = new String[tableParameters.getHeigth()];
         try (Statement statement = connection.createStatement();
-             ResultSet result = statement.executeQuery("SELECT * FROM " + database + "." + workParameters.get("table") +
+             ResultSet result = statement.executeQuery("SELECT * FROM " + database + "." + table +
                      " ORDER BY " + tableParameters.getColumns()[0])) {
             String row;
             int numerOfRow = 0;
@@ -195,5 +193,17 @@ public class DBManager {
         } catch (SQLException e) {
             throw e;
         }
+    }
+
+    public void setTable(String table) {
+        this.table = table;
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public String getTable() {
+        return table;
     }
 }

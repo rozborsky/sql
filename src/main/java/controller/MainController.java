@@ -3,19 +3,17 @@ package controller;
 import model.*;
 import view.Console;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class MainController {
     private Map workParameters = new HashMap<>();
-    private Connection connection = null;
-    private Console wiev = null;
+    private Console view = null;
 
-    public Command[] commands;
-    DBManager dbManager;
-    public String[] tables;
+    private Command[] commands;
+    private DBManager manager;
+    private String[] tables;
 
     static{
         try{
@@ -26,26 +24,25 @@ public class MainController {
         }
     }
 
-    public MainController(Console wiev){
-        this.wiev = wiev;
-        wiev.write("SQLCMD manager");
+    public MainController(Console view){
+        this.view = view;
+        view.write("SQLCMD manager");
 
         Connector connect = new Connector();
-        this.connection = connect.create(connection, workParameters, wiev);
-        this.dbManager = new DBManager(connection, workParameters);
+        manager = connect.create(view);
 
         availableTables();
 
-        Help help = new Help(wiev);
+        Help help = new Help(view);
         commands = new Command[]{
-                new List(workParameters, tables, wiev),
-                new Find(dbManager, workParameters, wiev),
-                new Insert(dbManager, workParameters, wiev),
-                new Update(dbManager, workParameters, wiev),
-                new Delete(dbManager, workParameters, wiev),
-                new Clear(dbManager, workParameters, wiev),
+                new List(manager, tables, view),
+                new Find(manager, workParameters, view),
+                new Insert(manager, workParameters, view),
+                new Update(manager, workParameters, view),
+                new Delete(manager, workParameters, view),
+                new Clear(manager, workParameters, view),
                 help,
-                new Exit(wiev)};
+                new Exit(view)};
         help.addCommands(commands);
         action();
     }
@@ -54,17 +51,17 @@ public class MainController {
         String command;
 
         while(true){
-            wiev.write("Insert 'list' for show available tables, 'help' for help  or 'exit' to close program");
-            command = wiev.read();
+            view.write("Insert 'list' for show available tables, 'help' for help  or 'exit' to close program");
+            command = view.read();
 
             if (showTables(command, commands, tables)){
                 chooseTable();
             }else{
-                wiev.write("Wrong command\n");
+                view.write("Wrong command\n");
                 continue;
             }
 
-            wiev.write("\n");
+            view.write("\n");
         }
     }
 
@@ -72,18 +69,18 @@ public class MainController {
         String command = "";
 
         while (!command.equals("back")){
-            wiev.write("Choose table");
-            command = wiev.read();
+            view.write("Choose table");
+            command = view.read();
 
             boolean isExist = false;
             for (int i = 0; i < tables.length; i++) {
                 if (tables[i].equals(command)){
-                    workParameters.put("table", command);
+                    manager.setTable(command);
                     isExist = true;
                 }
             }
             if (isExist == false && !command.equals("back")){
-                wiev.write(String.format("Table '%s'  does not exist\n", command));
+                view.write(String.format("Table '%s'  does not exist\n", command));
                 continue;
             }
             if (command.equals("back")){
@@ -98,9 +95,9 @@ public class MainController {
 
         boolean isExecute = false;
         while (!command.equals("back")) {
-            wiev.write("\nTo work with table '" + workParameters.get("table") + "' insert command, " +
+            view.write("\nTo work with table '" + workParameters.get("table") + "' insert command, " +
                     "to see available tables write 'back' or 'exit' to live program, to read help insert 'help'");
-            command = wiev.read();
+            command = view.read();
 
             for (Command availableCommand : commands) {
                 if (availableCommand.canProcess(command)) {
@@ -109,16 +106,16 @@ public class MainController {
                 }
             }
             if (isExecute == false){
-                wiev.write("\nWrong command");
+                view.write("\nWrong command");
             }
         }
     }
 
     private void availableTables(){
         try {
-            this.tables = dbManager.list();
+            this.tables = manager.list();
         } catch (SQLException e) {
-            wiev.error("",e);
+            view.error("",e);
         }
     }
 

@@ -3,16 +3,15 @@ package controller;
 import view.Console;
 
 public class Exit extends Command{
-    private Console wiev;
+    private Console view;
 
-    public Exit(Console wiev){
-        this.wiev = wiev;
+    public Exit(Console view){
+        this.view = view;
     }
 
     @Override
     public String format() {
-        String command = "exit";
-        return command;
+        return "exit";
     }
 
     @Override
@@ -26,7 +25,7 @@ public class Exit extends Command{
     }
 
     private void exit(){
-        wiev.write("Bye!");
+        view.write("Bye!");
         System.exit(0);
     }
 }

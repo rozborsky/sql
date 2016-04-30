@@ -8,15 +8,14 @@ import java.util.Map;
 
 public class Update extends Insert {
 
-    public Update(DBManager dbManager, Map workParameters, Console wiev) {
-        super(dbManager, workParameters, wiev);
+    public Update(DBManager dbManager, Map workParameters, Console view) {
+        super(dbManager, workParameters, view);
         super.message = "To update table insert";
     }
 
     @Override
     protected String format() {
-        String command = "update";
-        return command;
+        return "update";
     }
 
     @Override
@@ -30,13 +29,13 @@ public class Update extends Insert {
         if (dbManager.isExists(Integer.parseInt(enteredData[0]))){
             try{
                 dbManager.update(idColunm, changedColumns, super.tableParameters, super.enteredData);
-                wiev.write(String.format("Table %s was updated", workParameters.get("table")));
+                view.write(String.format("Table %s was updated", workParameters.get("table")));
             }catch (SQLException e){
-                wiev.error("Can't update the table\n", e);
+                view.error("Can't update the table\n", e);
             }
         }
         else {
-            wiev.write("Can't update the table, row with entered " + super.tableParameters.getColumns()[0] + " not exist");
+            view.write("Can't update the table, row with entered " + super.tableParameters.getColumns()[0] + " not exist");
         }
     }
 
