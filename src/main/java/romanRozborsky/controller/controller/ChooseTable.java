@@ -7,11 +7,10 @@ import view.Console;
  * Created by roman on 04.05.2016.
  */
 public class ChooseTable {
-    Command [] commands;
-    String[] tables;
-    DBManager manager;
-    Console view;
-
+    private Command [] commands;
+    private String[] tables;
+    private DBManager manager;
+    private Console view;
 
     public ChooseTable(Command [] commands, String[] tables, DBManager manager, Console view){
         this.commands = commands;
