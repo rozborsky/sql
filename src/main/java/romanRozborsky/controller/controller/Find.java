@@ -1,23 +1,20 @@
-package controller;
+package romanRozborsky.controller.controller;
 
 import model.DBManager;
 import view.Console;
 
 import java.sql.SQLException;
-import java.util.Map;
 
 /**
  * Created by roman on 27.04.2016.
  */
 public class Find extends Command {
     private Console view;
-    private Map workParameters;
     private DBManager manager;
     private String line = "_____________________________________________________________________";
 
-    public Find(DBManager dbManager,  Map workParameters, Console view){
-        this.manager = dbManager;
-        this.workParameters = workParameters;
+    public Find(DBManager manager, Console view){
+        this.manager = manager;
         this.view = view;
     }
 
@@ -29,7 +26,7 @@ public class Find extends Command {
     @Override
     public void process() {
         TableParameters table = new TableParameters(manager, view);
-        int numberOfRows = table.getHeigth();
+        int numberOfRows = table.getHeight();
         String [] rows;
 
         if (numberOfRows != 0) {

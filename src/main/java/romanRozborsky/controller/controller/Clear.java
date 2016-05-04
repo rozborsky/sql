@@ -1,19 +1,16 @@
-package controller;
+package romanRozborsky.controller.controller;
 
 import model.DBManager;
 import view.Console;
 
 import java.sql.SQLException;
-import java.util.Map;
 
 public class Clear extends Command {
     private Console view;
-    private DBManager dbManager;
-    Map workParameters;
+    private DBManager manager;
 
-    public Clear(DBManager dbManager, Map workParameters, Console view){
-        this.dbManager = dbManager;
-        this.workParameters = workParameters;
+    public Clear(DBManager dbManager, Console view){
+        this.manager = dbManager;
         this.view = view;
     }
 
@@ -21,16 +18,17 @@ public class Clear extends Command {
     public void process() {
         String command;
         do {
-            view.write("Are you sure you want to clear the table '" + workParameters.get("table") + "'? Yes - press 'y',"
+            view.write("Are you sure you want to clear the table '" + manager.getTable() + "'? Yes - press 'y',"
                     + " no - press 'n'");
             command = view.read();
             if (command.equals("y")){
                 try{
-                    if (dbManager.clear()) {
-                        view.write("Table '" + workParameters.get("table") + "' was cleared");
+                    if (manager.clear()) {
+                        view.write("Table '" + manager.getTable() + "' was cleared");
+                        return;
                     }
                 }catch (SQLException e){
-                    view.error(String.format("Can't clear table %s", workParameters.get("table")), e);
+                    view.error(String.format("Can't clear table '%s'", manager.getTable()), e);
                 }
             }
         }while (!"n".equals(command) && !"back".equals(command));

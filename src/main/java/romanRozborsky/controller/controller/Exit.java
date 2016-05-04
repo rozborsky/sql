@@ -1,4 +1,4 @@
-package controller;
+package romanRozborsky.controller.controller;
 
 import view.Console;
 

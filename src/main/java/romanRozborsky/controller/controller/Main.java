@@ -1,4 +1,4 @@
-package controller;
+package romanRozborsky.controller.controller;
 
 import view.Console;
 
@@ -8,4 +8,5 @@ public class Main {
         new MainController(wiew);
     }
 }
+
 //public|postgres|mainuser

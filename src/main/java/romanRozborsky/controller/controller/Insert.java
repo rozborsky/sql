@@ -1,10 +1,9 @@
-package controller;
+package romanRozborsky.controller.controller;
 
 import model.DBManager;
 import view.Console;
 
 import java.sql.*;
-import java.util.Map;
 
 /**
  * Created by roman on 18.03.2016.
@@ -13,32 +12,30 @@ public class Insert extends Command {
     protected Console view;
     protected String message = "Insert";
     protected String [] enteredData;
-    protected String dbName;
-    protected DBManager dbManager;
+    protected String table;
+    protected DBManager manager;
     protected TableParameters tableParameters;
-    protected Map workParameters;
 
-    public Insert(DBManager dbManager, Map workParameters, Console view){
-        this.workParameters = workParameters;
+    public Insert(DBManager manager, Console view){
         this.view = view;
-        this.dbManager = dbManager;
+        this.manager = manager;
     }
 
     @Override
     public void process() {
-        this.dbName = (String) workParameters.get("DBName");
-        tableParameters = new TableParameters(dbManager, view);
+        this.table = manager.getTable();
+        tableParameters = new TableParameters(manager, view);
 
         String showColumns = columns(tableParameters.getColumns(), "|");
         if (tableParameters.getWidth() == 0){
-            view.write("Table '" + workParameters.get("table") + "' has't columns. You cant work with table");
+            view.write("Table '" + table + "' has't columns. You cant work with table");
         }
         else {
             insert_data(view, showColumns);
         }
     }
 
-    private void insert_data( Console wiev, String showColumns) {
+    private void insert_data(Console wiev, String showColumns) {
         do{
             wiev.write("\n" + message + " values in format " + showColumns + ", 'back' to enter another command " +
             "or 'exit' to close program");
@@ -65,13 +62,12 @@ public class Insert extends Command {
 
     protected void request(String enteredValues, String columns) {
         try{
-            if(dbManager.insert(enteredValues, columns)){
-                view.write(String.format("\nTable %s was updated", workParameters.get("table")));
+            if(manager.insert(enteredValues, columns)){
+                view.write(String.format("\nTable %s was updated", table));
             }
         }catch (SQLException e){
-            view.error("Can't insert values into the '" + workParameters.get("table") + "' ", e);
+            view.error("Can't insert values into the '" + table + "' ", e);
         }
-
     }
 
     protected String columns(String [] array, String format) {

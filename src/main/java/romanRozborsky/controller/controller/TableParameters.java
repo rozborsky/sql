@@ -1,4 +1,4 @@
-package controller;
+package romanRozborsky.controller.controller;
 
 import model.DBManager;
 import view.Console;
@@ -10,15 +10,15 @@ import java.sql.SQLException;
  */
 public class TableParameters {
     private int width;
-    private int heigth;
+    private int height;
     private String [] columns = new String[0];
-    private DBManager bd;
-    private Console wiev;
+    private DBManager manager;
+    private Console view;
 
 
-   public TableParameters(DBManager bd, Console wiev){
-        this.bd = bd;
-        this.wiev = wiev;
+   public TableParameters(DBManager manager, Console view){
+        this.manager = manager;
+        this.view = view;
         tableHight();
         tableWidth();
         getColumnNames();
@@ -26,34 +26,33 @@ public class TableParameters {
 
     private void tableWidth() {
         try{
-            this.width = bd.tableWidth();
+            this.width = manager.tableWidth();
         }catch (SQLException e){
-            wiev.error("", e);
+            view.error("", e);
         }
     }
 
     private void tableHight() {
         try{
-            this.heigth = bd.tableHight();
+            this.height = manager.tableHight();
         }catch (SQLException e){
-            wiev.error("", e);
+            view.error("", e);
         }
     }
 
     private void getColumnNames(){
         try{
-            this.columns = bd.getColumnNames(width);
+            this.columns = manager.getColumnNames(width);
         }catch (SQLException e){
-            wiev.error("", e);
+            view.error("", e);
         }
     }
 
     public int getWidth(){
         return width;
     }
-
-    public int getHeigth(){
-        return heigth;
+    public int getHeight(){
+        return height;
     }
     public String [] getColumns() {
         return columns;

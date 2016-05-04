@@ -1,19 +1,16 @@
-package controller;
+package romanRozborsky.controller.controller;
 
 import model.DBManager;
 import view.Console;
 
 import java.sql.SQLException;
-import java.util.Map;
 
 public class Delete extends Command {
     private Console view;
     private DBManager dbManager;
-    private Map workParameters;
 
-    public Delete(DBManager dbManager, Map workParameters, Console view){
+    public Delete(DBManager dbManager, Console view){
         this.dbManager = dbManager;
-        this.workParameters = workParameters;
         this.view = view;
     }
 
@@ -22,7 +19,7 @@ public class Delete extends Command {
         TableParameters table = new TableParameters(dbManager, view);
         String command;
         if (table.getColumns().length == 0){
-            view.write("Table " + workParameters.get("table") + " is empty");
+            view.write("Table '" + dbManager.getTable() + "' is empty");
             return;
         }
         else{

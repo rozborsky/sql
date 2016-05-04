@@ -1,12 +1,10 @@
-package controller;
+package romanRozborsky.controller.controller;
 
 import model.DBManager;
 import view.Console;
 
 import java.io.InputStream;
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -46,13 +44,13 @@ public class Connector {
         return dbManager;
     }
 
-    private String getUrl(Console wiev) {
+    private String getUrl(Console view) {
         InputStream input = getClass().getClassLoader().getResourceAsStream("config.properties");
         Properties property = new Properties();
         try{
             property.load(input);
         }catch (Exception e){
-            wiev.error("Can't find property file ", e);
+            view.error("Can't find property file ", e);
             System.exit(0);
         }
         return property.getProperty("url");

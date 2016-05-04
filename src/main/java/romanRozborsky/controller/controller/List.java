@@ -1,15 +1,12 @@
-package controller;
+package romanRozborsky.controller.controller;
 
 import model.DBManager;
 import view.*;
-
-import java.util.Map;
 
 /**
  * Created by roman on 22.03.2016.
  */
 public class List extends Command {
-
     private String[] tables;
     DBManager manager;
     private Console view;
@@ -42,7 +39,7 @@ public class List extends Command {
                     tableList += ", ";
                 }
             }
-            tableList += "]\n";
+            tableList += "]";
             view.write("\nAvailable tables:");
             view.write(tableList);
         }

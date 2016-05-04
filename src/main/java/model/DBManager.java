@@ -1,9 +1,8 @@
 package model;
 
-import controller.TableParameters;
+import romanRozborsky.controller.controller.TableParameters;
 
 import java.sql.*;
-import java.util.Map;
 
 /**
  * Created by roman on 18.04.2016.
@@ -29,7 +28,6 @@ public class DBManager {
         }
         try{
             connection = DriverManager.getConnection(url + database, userName, password);
-            this.connection = connection;
             return connection;
         } catch (SQLException e){
             throw  e;
@@ -173,7 +171,7 @@ public class DBManager {
         }
     }
     public String [] find(TableParameters tableParameters) throws SQLException {
-        String [] rows = new String[tableParameters.getHeigth()];
+        String [] rows = new String[tableParameters.getHeight()];
         try (Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery("SELECT * FROM " + database + "." + table +
                      " ORDER BY " + tableParameters.getColumns()[0])) {
