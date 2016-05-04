@@ -33,6 +33,7 @@ public class Delete extends Command {
                         try {
                             if (dbManager.delete(table, command)){
                                 view.write("Row was removed");
+                                return;
                             }
                         }catch (SQLException e){
                             view.error("Cant delete row", e);
