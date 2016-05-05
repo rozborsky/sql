@@ -20,12 +20,12 @@ public class Update extends Insert {
     @Override
      public void request(String columns, String enteredValues) {
 
-        String columnsInRequest = columns(tableParameters.getColumns(), " = ?, ");
-        int splitPosition = columnsInRequest.indexOf(',');
-        String idColunm = columnsInRequest.substring(0, splitPosition);
-        String changedColumns = columnsInRequest.substring(splitPosition + 2, columnsInRequest.length());
-
         if (manager.isExists(Integer.parseInt(enteredData[0]))){
+            String columnsInRequest = columns(tableParameters.getColumns(), " = ?, ");
+            int splitPosition = columnsInRequest.indexOf(',');
+            String idColunm = columnsInRequest.substring(0, splitPosition);
+            String changedColumns = columnsInRequest.substring(splitPosition + 2, columnsInRequest.length());
+
             try{
                 manager.update(idColunm, changedColumns, tableParameters, enteredData);
                 view.write(String.format("Table %s was updated", table));
