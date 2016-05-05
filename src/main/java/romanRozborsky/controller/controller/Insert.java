@@ -40,6 +40,9 @@ public class Insert extends Command {
             wiev.write("\n" + message + " values in format " + showColumns + ", 'back' to enter another command " +
             "or 'exit' to close program");
             enteredData = wiev.read().split("\\|");
+            if (enteredData.length != 3){
+                continue;
+            }
             if (enteredData[0].equals("exit")){
                 Command exit = new Exit(wiev);
                 exit.process();
@@ -51,6 +54,7 @@ public class Insert extends Command {
                 Integer.parseInt(enteredData[0]);
             }catch (Exception e){
                 wiev.write("Insert correct id");
+                continue;
             }
 
         String columns = columns(tableParameters.getColumns(), ", ");
