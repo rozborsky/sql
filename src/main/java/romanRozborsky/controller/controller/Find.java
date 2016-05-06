@@ -34,7 +34,7 @@ public class Find extends Command {
             view.write(manager.getTable());
             view.write(line);
             try {
-                rows = manager.find(table);
+                rows = manager.find();
                 for (int i = 0; i < rows.length; i++) {
                     view.write(formatRow(rows[i]));
                     view.write(line);

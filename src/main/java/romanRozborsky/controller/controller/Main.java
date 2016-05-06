@@ -5,8 +5,9 @@ import view.Console;
 public class Main {
     public static void main(String[] args) {
         Console wiew = new Console();
+            MainController mainController = new MainController(wiew);
         try {
-            new MainController(wiew);
+            mainController.action();
         }catch (ExitExeption e){
             //do nothing
         }

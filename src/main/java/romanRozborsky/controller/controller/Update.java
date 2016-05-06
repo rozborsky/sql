@@ -27,7 +27,7 @@ public class Update extends Insert {
             String changedColumns = columnsInRequest.substring(splitPosition + 2, columnsInRequest.length());
 
             try{
-                manager.update(idColunm, changedColumns, tableParameters, enteredData);
+                manager.update(idColunm, changedColumns, enteredData);
                 view.write(String.format("Table %s was updated", table));
             }catch (SQLException e){
                 view.error("Can't update the table\n", e);

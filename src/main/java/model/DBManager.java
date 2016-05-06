@@ -1,7 +1,5 @@
 package model;
 
-import romanRozborsky.controller.controller.TableParameters;
-
 import java.sql.*;
 
 /**
@@ -43,12 +41,11 @@ public class DBManager {
         }
     }
 
-    public boolean delete(TableParameters tableParameters, String command) throws SQLException {
+    public boolean delete(String command) throws SQLException {
         try(Statement statement = connection.createStatement()){
-            statement.executeUpdate("DELETE FROM " + database + "." + table + " WHERE " + tableParameters.getColumns()[0] + " = " + command);
+            statement.executeUpdate("DELETE FROM " + database + "." + table + " WHERE " + getColumnNames(tableWidth())[0] + " = " + command);
             return true;
         } catch (SQLException e){
-            System.out.println("del");
             throw e;
         }
     }
@@ -63,13 +60,13 @@ public class DBManager {
         }
     }
 
-    public boolean update(String idColunm, String changedColumns, TableParameters tableParameters, String [] enteredData) throws SQLException {
+    public boolean update(String idColumn, String changedColumns, String [] enteredData) throws SQLException {
         try(PreparedStatement statement = connection.prepareStatement("UPDATE " + database + "." + table +
-                " SET " + changedColumns + " = ? WHERE " + idColunm)){
+                " SET " + changedColumns + " = ? WHERE " + idColumn)){
             int j;
-            for (int i = 0; i < tableParameters.getWidth(); i++) {
+            for (int i = 0; i < tableWidth(); i++) {
                 if (i == 0){
-                    j = tableParameters.getWidth();
+                    j = tableWidth();
                 }
                 else{
                     j = i;
@@ -170,18 +167,18 @@ public class DBManager {
             throw e;
         }
     }
-    public String [] find(TableParameters tableParameters) throws SQLException {
-        String [] rows = new String[tableParameters.getHeight()];
+    public String [] find() throws SQLException {
+        String [] rows = new String[tableHight()];
         try (Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery("SELECT * FROM " + database + "." + table +
-                     " ORDER BY " + tableParameters.getColumns()[0])) {
+                     " ORDER BY " + getColumnNames(tableWidth())[0])) {
             String row;
             int numerOfRow = 0;
             while (result.next()) {
                 row = "";
-                for (int i = 1; i <= tableParameters.getWidth(); i++) {
+                for (int i = 1; i <= tableWidth(); i++) {
                     row += result.getString(i);
-                    if (i < tableParameters.getWidth()){
+                    if (i < tableWidth()){
                         row += "|";
                     }
                 }

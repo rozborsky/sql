@@ -40,10 +40,9 @@ public class MainController {
                 help,
                 new Exit(view)};
         help.addCommands(commands);
-        action();
     }
 
-    private void action(){
+    public void action(){
         String command;
 
         while(true){
@@ -71,11 +70,7 @@ public class MainController {
     private boolean showTables(String enteredCommand, Command [] commands){
         for (Command availableCommands : commands){
             if (availableCommands.format().equals(enteredCommand)){
-                if (enteredCommand.equals("help") || enteredCommand.equals("exit")){
-                    availableCommands.process();
-                    return true;
-                }
-                else if(enteredCommand.equals("list") ){
+                if (enteredCommand.equals("list") || enteredCommand.equals("help") || enteredCommand.equals("exit")){
                     availableCommands.process();
                     return true;
                 }

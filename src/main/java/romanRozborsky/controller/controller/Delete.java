@@ -31,7 +31,7 @@ public class Delete extends Command {
                     int id = Integer.parseInt(command);
                     if (dbManager.isExists(id)){
                         try {
-                            if (dbManager.delete(table, command)){
+                            if (dbManager.delete(command)){
                                 view.write("Row was removed");
                                 return;
                             }
