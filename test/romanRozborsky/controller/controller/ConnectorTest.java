@@ -1,6 +1,7 @@
 package romanRozborsky.controller.controller;
 import static org.junit.Assert.*;
 import model.DBManager;
+import org.junit.Before;
 import org.junit.Test;
 import view.Console;
 
@@ -13,13 +14,21 @@ import java.lang.reflect.Method;
  */
 public class ConnectorTest {
     private Console view = new Console();
-    private Connector connector = new Connector();
+    private Connector connector;
+    private PrepareTable prepareTable;;
+
+    @Before
+    public void setup(){
+        prepareTable = new PrepareTable();
+        connector = new Connector();
+        view = prepareTable.getView();
+    }
 
     @Test
     public void getUrl() throws InvocationTargetException, IllegalAccessException {
         Method [] methods = connector.getClass().getDeclaredMethods();
-        methods[1].setAccessible(true);
-        String resultUrl = (String) methods[1].invoke(connector, view);
+        methods[0].setAccessible(true);
+        String resultUrl = (String) methods[0].invoke(connector, view);
         String expectedUrl = "jdbc:postgresql://localhost:5432/";
         assertEquals(resultUrl, expectedUrl);
     }
@@ -28,7 +37,7 @@ public class ConnectorTest {
     public void create(){
         String connectParameters = "public|postgres|mainuser";
         System.setIn(new ByteArrayInputStream(connectParameters.getBytes()));
-        DBManager manager = connector.create(view);
+        DBManager manager = connector.createConnection(view);
         assertNotNull(manager);
     }
 }
