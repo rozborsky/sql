@@ -22,26 +22,23 @@ public class InsertTest {
     DBManager manager;
     TableParameters tableParameters;
     Find find;
+    PrepareTable prepareTable;
 
     @Before
     public void setup(){
-        view = new Console();
-        manager = new DBManager("public", "postgres", "mainuser", "jdbc:postgresql://localhost:5432/");
+        prepareTable = new PrepareTable();
+        manager = prepareTable.getManager();
+        view = prepareTable.getView();
         manager.setTable("user");
 
-        try {
-            manager.connection();
-        }catch (SQLException e){
-            //do noting
-        }
         System.setOut(new PrintStream(outString));
         find = new Find(manager, view);
     }
 
     @Test
     public void notCorrectId(){
-        clearTable();
-        insertValues("a|1|1");
+        prepareTable.clearTable();
+        prepareTable.insertValues("a|1|1");
         tableParameters = new TableParameters(manager, view);
         int row = tableParameters.getHeight();
         assertEquals(0, row);
@@ -49,9 +46,9 @@ public class InsertTest {
 
     @Test
     public void correctId(){
-        clearTable();
-        insertValues("1|1|1");
-        insertValues("2|2|2");
+        prepareTable.clearTable();
+        prepareTable.insertValues("1|1|1");
+        prepareTable.insertValues("2|2|2");
         tableParameters = new TableParameters(manager, view);
         find.process();
         String expectedString = "Are you sure you want to clear the table 'user'? Yes - press 'y', no - press 'n'\r\n" +
@@ -59,11 +56,11 @@ public class InsertTest {
                 "\n" +
                 "Insert values in format id|name|password, 'back' to enter another command or 'exit' to close program\r\n" +
                 "\n" +
-                "Table user was updated\r\n" +
+                "Table 'user' was updated\r\n" +
                 "\n" +
                 "Insert values in format id|name|password, 'back' to enter another command or 'exit' to close program\r\n" +
                 "\n" +
-                "Table user was updated\r\n" +
+                "Table 'user' was updated\r\n" +
                 "\n" +
                 "\n" +
                 "_____________________________________________________________________\r\n" +
@@ -75,20 +72,5 @@ public class InsertTest {
                 "_____________________________________________________________________\r\n";
 
         assertEquals(expectedString, outString.toString());
-    }
-
-    private void clearTable() {
-        Clear clear = new Clear(manager, view);
-        String confirmation = "y";
-        InputStream iStream = new ByteArrayInputStream(confirmation.getBytes());
-        System.setIn(iStream);
-        clear.process();
-    }
-
-    private void insertValues(String insertedValue) {
-        Insert insert = new Insert(manager, view);
-        InputStream inputStream = new ByteArrayInputStream(insertedValue.getBytes());
-        System.setIn(inputStream);
-        insert.process();
     }
 }

@@ -13,19 +13,21 @@ import java.io.*;
 public class ListTest {
     private final ByteArrayOutputStream outString = new ByteArrayOutputStream();
     DBManager manager;
-    Console console;
+    Console view;
+    PrepareTable prepareTable;
 
     @Before
-        public void setup(){
-        manager = new DBManager("public", "postgres", "mainuser", "jdbc:postgresql://localhost:5432/");
-        console = new Console();
+    public void setup(){
+        prepareTable = new PrepareTable();
+        manager = prepareTable.getManager();
+        view = prepareTable.getView();
         System.setOut(new PrintStream(outString));
     }
 
     @Test
         public void process(){
         String [] tables = {"user", "test", "enotherTest"};
-        List list = new List(manager, tables, console);
+        List list = new List(manager, tables, view);
         list.process();
         String expectedString = "\nAvailable tables:\r\n[user, test, enotherTest]\r\n";
         assertEquals(expectedString, outString.toString());

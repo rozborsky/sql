@@ -26,7 +26,7 @@ public class DBManagerTest {
     static public void process(){
         manager = new DBManager("public", "postgres", "mainuser", "jdbc:postgresql://localhost:5432/");
         try {
-            connection = manager.connection();
+            connection = manager.createConnection();
         }catch (SQLException e){
             //do nothing
         }
@@ -43,7 +43,7 @@ public class DBManagerTest {
     public void connection(){
         connection = null;
         try {
-            connection = manager.connection();
+            connection = manager.createConnection();
         }catch (SQLException e){
             //do nothing
         }
@@ -58,7 +58,7 @@ public class DBManagerTest {
         int rows = 3;
         try{
             manager.clear();
-            rows = manager.tableHight();
+            rows = manager.getTableHight();
         }catch (SQLException e){
             assertTrue(false);
         }
@@ -131,7 +131,7 @@ public class DBManagerTest {
     public void tableWidth(){
         int width = 0;
         try {
-            width = manager.tableWidth();
+            width = manager.getTableWidth();
         }catch (SQLException e){
             assertTrue(false);
         }
@@ -143,7 +143,7 @@ public class DBManagerTest {
     public void tableHight(){
         int rows = 0;
         try{
-            rows = manager.tableHight();
+            rows = manager.getTableHight();
         }catch (SQLException e){
             assertTrue(false);
         }
@@ -153,7 +153,7 @@ public class DBManagerTest {
         insertValues("1|1|1");
         insertValues("2|2|2");
         try{
-            rows = manager.tableHight();
+            rows = manager.getTableHight();
         }catch (SQLException e){
             assertTrue(false);
         }
@@ -165,7 +165,7 @@ public class DBManagerTest {
     public void  getColumnNames(){
         String [] columnNames = null;
         try{
-            columnNames = manager.getColumnNames(manager.tableWidth());
+            columnNames = manager.getColumnNames(manager.getTableWidth());
         }catch (SQLException e){
             assertTrue(false);
         }
@@ -179,7 +179,7 @@ public class DBManagerTest {
         insertValues("2|2|2");
         String [] rows = null;
         try{
-            rows = manager.find();
+            rows = manager.getRows();
         }catch (SQLException e){
             assertTrue(false);
         }

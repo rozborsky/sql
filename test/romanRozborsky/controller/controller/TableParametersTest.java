@@ -17,22 +17,18 @@ public class TableParametersTest {
     Console view;
     DBManager manager;
     TableParameters tableParameters;
+    PrepareTable prepareTable;
 
     @Before
     public void setup(){
-        view = new Console();
-        manager = new DBManager("public", "postgres", "mainuser", "jdbc:postgresql://localhost:5432/");
+        prepareTable = new PrepareTable();
+        manager = prepareTable.getManager();
+        view = prepareTable.getView();
         manager.setTable("user");
-
-        try {
-            manager.connection();
-        }catch (SQLException e){
-            //do noting
-        }
-        tableParameters = new TableParameters(manager, view);
 
         clearTable();
         insertValues();
+        tableParameters = new TableParameters(manager, view);
     }
 
 

@@ -18,22 +18,19 @@ public class ClearTest {
     Console view;
     DBManager manager;
     TableParameters tableParameters;
+    PrepareTable prepareTable;
 
     @Before
     public void setup(){
-        view = new Console();
-        manager = new DBManager("public", "postgres", "mainuser", "jdbc:postgresql://localhost:5432/");
+        prepareTable = new PrepareTable();
+        manager = prepareTable.getManager();
+        view = prepareTable.getView();
         manager.setTable("user");
 
-        try {
-            manager.connection();
-        }catch (SQLException e){
-            //do noting
-        }
-        clearTable();
-        insertValues("1|1|1");
-        insertValues("2|2|2");
-        insertValues("3|3|3");
+        prepareTable.clearTable();
+        prepareTable.insertValues("1|1|1");
+        prepareTable.insertValues("2|2|2");
+        prepareTable.insertValues("3|3|3");
     }
 
     @Test
@@ -43,24 +40,9 @@ public class ClearTest {
             System.err.println("Can't start test - table is empty");
             return;
         }
-        clearTable();
+        prepareTable.clearTable();
         tableParameters = new TableParameters(manager, view);
         int hight = tableParameters.getHeight();
         assertEquals(0, hight);
-    }
-
-    private void clearTable() {
-        Clear clear = new Clear(manager, view);
-        String confirmation = "y";
-        InputStream iStream = new ByteArrayInputStream(confirmation.getBytes());
-        System.setIn(iStream);
-        clear.process();
-    }
-
-    private void insertValues(String insertedValue) {
-        Insert insert = new Insert(manager, view);
-        InputStream inputStream = new ByteArrayInputStream(insertedValue.getBytes());
-        System.setIn(inputStream);
-        insert.process();
     }
 }
