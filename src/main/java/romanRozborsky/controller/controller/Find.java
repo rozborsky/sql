@@ -20,7 +20,7 @@ public class Find extends Command {
 
     @Override
     protected String format() {
-        return "find";
+        return "getRows";
     }
 
     @Override
@@ -34,7 +34,7 @@ public class Find extends Command {
             view.write(manager.getTable());
             view.write(line);
             try {
-                rows = manager.find();
+                rows = manager.getRows();
                 for (int i = 0; i < rows.length; i++) {
                     view.write(formatRow(rows[i]));
                     view.write(line);
@@ -61,6 +61,6 @@ public class Find extends Command {
 
     @Override
     protected String description() {
-        return "'find' - to obtain the contents of the current table";
+        return "'getRows' - to obtain the contents of the current table";
     }
 }

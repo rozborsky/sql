@@ -7,19 +7,19 @@ import java.sql.SQLException;
 
 public class Delete extends Command {
     private Console view;
-    private DBManager dbManager;
+    private DBManager manager;
 
-    public Delete(DBManager dbManager, Console view){
-        this.dbManager = dbManager;
+    public Delete(DBManager manager, Console view){
+        this.manager = manager;
         this.view = view;
     }
 
     @Override
     public void process() {
-        TableParameters table = new TableParameters(dbManager, view);
+        TableParameters table = new TableParameters(manager, view);
         String command;
         if (table.getColumns().length == 0){
-            view.write("Table '" + dbManager.getTable() + "' is empty");
+            view.write("Table '" + manager.getTable() + "' is empty");
             return;
         }
         else{
@@ -29,9 +29,9 @@ public class Delete extends Command {
                 command = view.read();
                 try{
                     int id = Integer.parseInt(command);
-                    if (dbManager.isExists(id)){
+                    if (manager.isExists(id)){
                         try {
-                            if (dbManager.delete(command)){
+                            if (manager.delete(command)){
                                 view.write("Row was removed");
                                 return;
                             }

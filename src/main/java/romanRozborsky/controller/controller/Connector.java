@@ -14,12 +14,21 @@ public class Connector {
 
     private String url = null;
 
-    public DBManager create (Console view){
+    static{
+        try{
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e){
+            System.out.println("Can't getRows jdbc driver ");
+            throw new ExitException();
+        }
+    }
+
+    public DBManager createConnection(Console view){
 
         url = getUrl(view);
 
         boolean isConnect = false;
-        DBManager dbManager = null;
+        DBManager manager = null;
         do{
             view.write("\nFor the database connection, enter the information in the format 'database_name|user_name|password'");
             String [] insertedValues;
@@ -31,9 +40,9 @@ public class Connector {
             String userName = insertedValues[1];
             String password = insertedValues[2];
 
-            dbManager = new DBManager(database, userName, password, url);
+            manager = new DBManager(database, userName, password, url);
             try{
-                dbManager.connection();
+                manager.createConnection();
                 view.write(String.format("\nConnect to the database '%s' succesful\n", database));
                 isConnect = true;
             }catch (SQLException e){
@@ -41,7 +50,7 @@ public class Connector {
                 view.write("\n");
             }
         }while(!isConnect);
-        return dbManager;
+        return manager;
     }
 
     private String getUrl(Console view) {
@@ -51,7 +60,7 @@ public class Connector {
             property.load(input);
         }catch (Exception e){
             view.error("Can't find property file ", e);
-            System.exit(0);
+            throw new ExitException();
         }
         return property.getProperty("url");
     }

@@ -7,8 +7,8 @@ import java.sql.SQLException;
 
 public class Update extends Insert {
 
-    public Update(DBManager dbManager, Console view) {
-        super(dbManager, view);
+    public Update(DBManager manager, Console view) {
+        super(manager, view);
         super.message = "To update table insert";
     }
 
@@ -28,13 +28,13 @@ public class Update extends Insert {
 
             try{
                 manager.update(idColunm, changedColumns, enteredData);
-                view.write(String.format("Table %s was updated", table));
+                view.write(String.format("Table '%s' was updated", table));
             }catch (SQLException e){
                 view.error("Can't update the table\n", e);
             }
         }
         else {
-            view.write("Can't update the table, row with entered " + tableParameters.getColumns()[0] + " not exist");
+            view.write("Can't update the table, row with entered " + tableParameters.getColumns()[0] + " is not exist");
         }
     }
 

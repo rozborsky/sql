@@ -9,8 +9,8 @@ public class Clear extends Command {
     private Console view;
     private DBManager manager;
 
-    public Clear(DBManager dbManager, Console view){
-        this.manager = dbManager;
+    public Clear(DBManager manager, Console view){
+        this.manager = manager;
         this.view = view;
     }
 

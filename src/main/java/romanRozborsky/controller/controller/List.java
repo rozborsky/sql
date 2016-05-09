@@ -8,7 +8,7 @@ import view.*;
  */
 public class List extends Command {
     private String[] tables;
-    DBManager manager;
+    private DBManager manager;
     private Console view;
 
     public List(DBManager manager, String[] tables, Console view){

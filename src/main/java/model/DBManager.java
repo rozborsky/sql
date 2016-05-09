@@ -20,7 +20,7 @@ public class DBManager {
         this.url = url;
     }
 
-    public Connection connection() throws SQLException{
+    public Connection createConnection() throws SQLException{
         if (connection != null){
             this.connection = null;
         }
@@ -167,7 +167,7 @@ public class DBManager {
             throw e;
         }
     }
-    public String [] find() throws SQLException {
+    public String [] getRows() throws SQLException {
         String [] rows = new String[tableHight()];
         try (Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery("SELECT * FROM " + database + "." + table +

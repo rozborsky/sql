@@ -44,8 +44,7 @@ public class Insert extends Command {
                 continue;
             }
             if (enteredData[0].equals("exit")){
-                Command exit = new Exit(wiev);
-                exit.process();
+                throw new ExitException();
             }
             if (enteredData[0].equals("back")){
                 return;
@@ -67,7 +66,7 @@ public class Insert extends Command {
     protected void request(String enteredValues, String columns) {
         try{
             if(manager.insert(enteredValues, columns)){
-                view.write(String.format("\nTable %s was updated", table));
+                view.write(String.format("\nTable '%s' was updated", table));
             }
         }catch (SQLException e){
             view.error("Can't insert values into the '" + table + "' ", e);

@@ -8,7 +8,7 @@ public class Main {
             MainController mainController = new MainController(wiew);
         try {
             mainController.action();
-        }catch (ExitExeption e){
+        }catch (ExitException e){
             //do nothing
         }
     }

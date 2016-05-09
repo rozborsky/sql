@@ -13,39 +13,28 @@ public class TableParameters {
     private int height;
     private String [] columns = new String[0];
     private DBManager manager;
-    private Console view;
-
 
    public TableParameters(DBManager manager, Console view){
         this.manager = manager;
-        this.view = view;
-        tableHight();
-        tableWidth();
-        getColumnNames();
+       try{
+            tableHight();
+            tableWidth();
+            getColumnNames();
+       }catch (SQLException e){
+           view.error("Can't work with table", e);
+       }
     }
 
-    private void tableWidth() {
-        try{
+    private void tableWidth() throws SQLException {
             this.width = manager.tableWidth();
-        }catch (SQLException e){
-            view.error("", e);
-        }
     }
 
-    private void tableHight() {
-        try{
+    private void tableHight() throws SQLException {
             this.height = manager.tableHight();
-        }catch (SQLException e){
-            view.error("", e);
-        }
     }
 
-    private void getColumnNames(){
-        try{
+    private void getColumnNames() throws SQLException {
             this.columns = manager.getColumnNames(width);
-        }catch (SQLException e){
-            view.error("", e);
-        }
     }
 
     public int getWidth(){

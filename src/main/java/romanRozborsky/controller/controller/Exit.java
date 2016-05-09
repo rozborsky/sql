@@ -26,6 +26,6 @@ public class Exit extends Command{
 
     private void exit(){
         view.write("Bye!");
-        throw new ExitExeption();
+        throw new ExitException();
     }
 }

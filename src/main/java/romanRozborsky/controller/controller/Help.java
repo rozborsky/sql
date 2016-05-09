@@ -4,12 +4,13 @@ import view.Console;
 
 public class Help extends Command {
     private Console view;
-    private String [] commandArray;
+    private String [] commands;
     private String line = "_____________________________________________________________________";
 
     public Help(Console view){
         this.view = view;
     }
+
     @Override
     public void process() {
         view.write("\n\n" + line +
@@ -17,8 +18,8 @@ public class Help extends Command {
                 "\nAvailable commands:" +
                 "\n" + line);
 
-        for (int i = 0; i < commandArray.length; i++) {
-            view.write(commandArray[i]);
+        for (int i = 0; i < commands.length; i++) {
+            view.write(commands[i]);
             view.write(line);
         }
     }
@@ -29,7 +30,7 @@ public class Help extends Command {
     }
 
     @Override
-    protected String description() { // TODO
+    protected String description() {
         return "'help' - to read help";
     }
 
@@ -38,6 +39,6 @@ public class Help extends Command {
         for (int i = 0; i < commands.length; i++) {
             command[i] = commands[i].description();
         }
-        this.commandArray =  command;
+        this.commands =  command;
     }
 }
