@@ -43,7 +43,8 @@ public class DBManager {
 
     public boolean delete(String command) throws SQLException {
         try(Statement statement = connection.createStatement()){
-            statement.executeUpdate("DELETE FROM " + database + "." + table + " WHERE " + getColumnNames(tableWidth())[0] + " = " + command);
+            statement.executeUpdate("DELETE FROM " + database + "." + table +
+                    " WHERE " + getColumnNames(getTableWidth())[0] + " = " + command);
             return true;
         } catch (SQLException e){
             throw e;
@@ -64,9 +65,9 @@ public class DBManager {
         try(PreparedStatement statement = connection.prepareStatement("UPDATE " + database + "." + table +
                 " SET " + changedColumns + " = ? WHERE " + idColumn)){
             int j;
-            for (int i = 0; i < tableWidth(); i++) {
+            for (int i = 0; i < getTableWidth(); i++) {
                 if (i == 0){
-                    j = tableWidth();
+                    j = getTableWidth();
                 }
                 else{
                     j = i;
@@ -128,7 +129,7 @@ public class DBManager {
     }
 
 
-    public int tableWidth() throws SQLException {
+    public int getTableWidth() throws SQLException {
         int columns;
         try(Statement statement = connection.createStatement();
             ResultSet countColumns = statement.executeQuery("SELECT COUNT(*) FROM information_schema.columns " +
@@ -141,7 +142,7 @@ public class DBManager {
         }
     }
 
-    public int tableHight() throws SQLException {
+    public int getTableHight() throws SQLException {
         int rows;
         try(Statement statement = connection.createStatement();
             ResultSet countRows = statement.executeQuery("SELECT COUNT(*) FROM " + database + "." + table)){
@@ -168,17 +169,17 @@ public class DBManager {
         }
     }
     public String [] getRows() throws SQLException {
-        String [] rows = new String[tableHight()];
+        String [] rows = new String[getTableHight()];
         try (Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery("SELECT * FROM " + database + "." + table +
-                     " ORDER BY " + getColumnNames(tableWidth())[0])) {
+                     " ORDER BY " + getColumnNames(getTableWidth())[0])) {
             String row;
             int numerOfRow = 0;
             while (result.next()) {
                 row = "";
-                for (int i = 1; i <= tableWidth(); i++) {
+                for (int i = 1; i <= getTableWidth(); i++) {
                     row += result.getString(i);
-                    if (i < tableWidth()){
+                    if (i < getTableWidth()){
                         row += "|";
                     }
                 }
