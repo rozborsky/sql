@@ -20,7 +20,7 @@ public class Find extends Command {
 
     @Override
     protected String format() {
-        return "getRows";
+        return "find";
     }
 
     @Override
@@ -61,6 +61,6 @@ public class Find extends Command {
 
     @Override
     protected String description() {
-        return "'getRows' - to obtain the contents of the current table";
+        return "'find' - to obtain the contents of the current table";
     }
 }

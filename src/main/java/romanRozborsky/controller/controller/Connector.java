@@ -47,7 +47,6 @@ public class Connector {
                 isConnect = true;
             }catch (SQLException e){
                 view.error(String.format("\nCan't connect to the database '%s' \n", database), e);
-                view.write("\n");
             }
         }while(!isConnect);
         return manager;

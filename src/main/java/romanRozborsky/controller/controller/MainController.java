@@ -10,6 +10,7 @@ public class MainController {
     private Command [] commands;
     private DBManager manager;
     private String[] tables;
+    private WorkWithTables workWithTables;
 
     public MainController(Console view){
         this.view = view;
@@ -41,7 +42,7 @@ public class MainController {
             command = view.read();
 
             if (checkCommand(command, commands)){
-                WorkWithTables workWithTables = new WorkWithTables(commands, tables, manager, view);
+                workWithTables = new WorkWithTables(commands, tables, manager, view);
                 workWithTables.chooseTable();
             }else{
                 view.write("Wrong command\n");
