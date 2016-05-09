@@ -3,12 +3,9 @@ package model;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import romanRozborsky.controller.controller.Clear;
-import romanRozborsky.controller.controller.Insert;
+import romanRozborsky.controller.controller.PrepareTable;
 import view.Console;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -20,22 +17,21 @@ import static org.junit.Assert.*;
 public class DBManagerTest {
     static DBManager manager;
     static Connection connection;
-    static Console view = new Console();
+    static Console view;
+    static PrepareTable prepareTable;
 
     @BeforeClass
     static public void process(){
-        manager = new DBManager("public", "postgres", "mainuser", "jdbc:postgresql://localhost:5432/");
-        try {
-            connection = manager.createConnection();
-        }catch (SQLException e){
-            //do nothing
-        }
+        prepareTable = new PrepareTable();
+        manager = prepareTable.getManager();
+        view = prepareTable.getView();
+
         manager.setTable("user");
     }
 
     @Before
     public void before(){
-        clearTable();
+        prepareTable.clearTable();
     }
 
 
@@ -52,9 +48,9 @@ public class DBManagerTest {
 
     @Test
     public void clear(){
-        insertValues("1|1|1");
-        insertValues("2|2|2");
-        insertValues("3|3|3");
+        prepareTable.insertValues("1|1|1");
+        prepareTable.insertValues("2|2|2");
+        prepareTable.insertValues("3|3|3");
         int rows = 3;
         try{
             manager.clear();
@@ -67,9 +63,9 @@ public class DBManagerTest {
 
     @Test
     public void delete(){
-        insertValues("1|1|1");
-        insertValues("2|2|2");
-        insertValues("3|3|3");
+        prepareTable.insertValues("1|1|1");
+        prepareTable.insertValues("2|2|2");
+        prepareTable.insertValues("3|3|3");
         try{
             manager.delete("2");
         }catch (SQLException e){
@@ -81,8 +77,8 @@ public class DBManagerTest {
 
     @Test
     public void insert(){
-        insertValues("1|1|1");
-        insertValues("2|2|2");
+        prepareTable.insertValues("1|1|1");
+        prepareTable.insertValues("2|2|2");
         String enteredValues = "3', '3', '3";
         String columns = "id, name, password";
         try{
@@ -95,9 +91,9 @@ public class DBManagerTest {
 
     @Test
     public void update(){
-        insertValues("1|1|1");
-        insertValues("2|2|2");
-        insertValues("3|3|3");
+        prepareTable.insertValues("1|1|1");
+        prepareTable.insertValues("2|2|2");
+        prepareTable.insertValues("3|3|3");
         String [] newValues = {"2", "4", "4"};
         try {
             manager.update("id = ?", "name = ?, password", newValues);
@@ -109,8 +105,8 @@ public class DBManagerTest {
 
     @Test
     public void isExist(){
-        insertValues("1|1|1");
-        insertValues("2|2|2");
+        prepareTable.insertValues("1|1|1");
+        prepareTable.insertValues("2|2|2");
         assertTrue(manager.isExists(2));
         assertFalse(manager.isExists(3));
     }
@@ -150,8 +146,8 @@ public class DBManagerTest {
         int expectedRows = 0;
         assertEquals(expectedRows, rows);
 
-        insertValues("1|1|1");
-        insertValues("2|2|2");
+        prepareTable.insertValues("1|1|1");
+        prepareTable.insertValues("2|2|2");
         try{
             rows = manager.getTableHight();
         }catch (SQLException e){
@@ -175,8 +171,8 @@ public class DBManagerTest {
 
     @Test
     public void find(){
-        insertValues("1|1|1");
-        insertValues("2|2|2");
+        prepareTable.insertValues("1|1|1");
+        prepareTable.insertValues("2|2|2");
         String [] rows = null;
         try{
             rows = manager.getRows();
@@ -185,24 +181,5 @@ public class DBManagerTest {
         }
         String [] expectedRows = {"1|1|1", "2|2|2"};
         assertArrayEquals(expectedRows, rows);
-    }
-
-
-
-
-
-    static private void clearTable() {
-        Clear clear = new Clear(manager, view);
-        String confirmation = "y";
-        InputStream iStream = new ByteArrayInputStream(confirmation.getBytes());
-        System.setIn(iStream);
-        clear.process();
-    }
-
-    private void insertValues(String insertedValue) {
-        Insert insert = new Insert(manager, view);
-        InputStream inputStream = new ByteArrayInputStream(insertedValue.getBytes());
-        System.setIn(inputStream);
-        insert.process();
     }
 }

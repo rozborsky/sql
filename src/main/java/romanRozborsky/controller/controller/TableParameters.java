@@ -15,7 +15,7 @@ public class TableParameters {
     private DBManager manager;
 
    public TableParameters(DBManager manager, Console view){
-        this.manager = manager;
+       this.manager = manager;
        try{
             tableHight();
             tableWidth();
@@ -26,11 +26,11 @@ public class TableParameters {
     }
 
     private void tableWidth() throws SQLException {
-            this.width = manager.tableWidth();
+            this.width = manager.getTableWidth();
     }
 
     private void tableHight() throws SQLException {
-            this.height = manager.tableHight();
+            this.height = manager.getTableHight();
     }
 
     private void getColumnNames() throws SQLException {
