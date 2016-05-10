@@ -6,7 +6,9 @@ import org.junit.Test;
 import view.Console;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.sql.SQLException;
 
 import static org.junit.Assert.*;
@@ -15,6 +17,7 @@ import static org.junit.Assert.*;
  * Created by roman on 05.05.2016.
  */
 public class DeleteTest {
+    private final ByteArrayOutputStream outString = new ByteArrayOutputStream();
     DBManager manager;
     Console view;
     PrepareTable prepareTable;
@@ -27,13 +30,13 @@ public class DeleteTest {
         manager.setTable("user");
 
         prepareTable.clearTable();
-        prepareTable.insertValues("1|1|1");
-        prepareTable.insertValues("2|2|2");
-        prepareTable.insertValues("3|3|3");
     }
 
     @Test
     public void process(){
+        prepareTable.insertValues("1|1|1");
+        prepareTable.insertValues("2|2|2");
+        prepareTable.insertValues("3|3|3");
         Delete delete = new Delete(manager, view);
         String idRow = "3";
         InputStream iStream = new ByteArrayInputStream(idRow.getBytes());

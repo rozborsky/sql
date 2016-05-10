@@ -36,11 +36,14 @@ public class ClearTest {
     @Test
     public void proces(){
         tableParameters = new TableParameters(manager, view);
-        if (tableParameters.getHeight() == 0){
-            System.err.println("Can't start test - table is empty");
-            return;
-        }
-        prepareTable.clearTable();
+        assertTrue("Can't start test - table is empty", tableParameters.getHeight() >= 1);
+
+        Clear clear = new Clear(manager, view);
+        String confirmation = "y";
+        InputStream iStream = new ByteArrayInputStream(confirmation.getBytes());
+        System.setIn(iStream);
+        clear.process();
+
         tableParameters = new TableParameters(manager, view);
         int hight = tableParameters.getHeight();
         assertEquals(0, hight);
