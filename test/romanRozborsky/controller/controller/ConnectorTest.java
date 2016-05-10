@@ -24,16 +24,7 @@ public class ConnectorTest {
         view = prepareTable.getView();
     }
 
-    @Test
-    public void getUrl() throws InvocationTargetException, IllegalAccessException {
-        Method [] methods = connector.getClass().getDeclaredMethods();
-        methods[0].setAccessible(true);
-        String resultUrl = (String) methods[0].invoke(connector, view);
-        String expectedUrl = "jdbc:postgresql://localhost:5432/";
-        assertEquals(resultUrl, expectedUrl);
-    }
-
-    @Test
+       @Test
     public void create(){
         String connectParameters = "public|postgres|mainuser";
         System.setIn(new ByteArrayInputStream(connectParameters.getBytes()));

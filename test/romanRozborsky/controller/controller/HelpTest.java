@@ -42,7 +42,7 @@ public class HelpTest {
                 "_____________________________________________________________________\r\n" +
                 "'list' - for a list of all database tables\r\n" +
                 "_____________________________________________________________________\r\n" +
-                "'getRows' - to obtain the contents of the current table\r\n" +
+                "'find' - to obtain the contents of the current table\r\n" +
                 "_____________________________________________________________________\r\n" +
                 "'insert' - to write to the current table\r\n" +
                 "_____________________________________________________________________\r\n" +
