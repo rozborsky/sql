@@ -1,5 +1,6 @@
 package rozborskyRoman.controller;
 
+
 import rozborskyRoman.view.InputOutput;
 
 public class Exit extends Command{
@@ -25,7 +26,7 @@ public class Exit extends Command{
     }
 
     private void exit(){
-        view.write("Bye!\n_____________________________________________________________________\n\n");
+        view.write("Bye!\n_____________________________________________________________________");
         throw new ExitException();
     }
 }

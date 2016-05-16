@@ -1,6 +1,8 @@
 package rozborskyRoman.integration;
 
+
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -30,17 +32,15 @@ public class IntegrationTest {
         InputStream inputStream = new ByteArrayInputStream(insertedCommands.getBytes());
         System.setIn(inputStream);
         MainForIntegrationTest.main(new String[0]);
-        String expectedStringExit = "SQLCMD manager\n" +
-                "\n" +
-                "For the database connection, enter the information in the format 'database_name|user_name|password'\n" +
-                "\n" +
-                "Connect to the database 'public' succesful\n" +
-                "\n" +
-                "Insert 'list' to show available tables, 'help' for help  or 'exit' to close program\n" +
-                "Bye!\n" +
-                "_____________________________________________________________________\n" +
-                "\n" +
-                "\n";
+        String expectedStringExit = "SQLCMD manager\r\n" +
+                "\r\n" +
+                "For the database connection, enter the information in the format 'database_name|user_name|password'\r\n" +
+                "\r\n" +
+                "Connect to the database 'public' succesful\r\n" +
+                "\r\n" +
+                "Insert 'list' to show available tables, 'help' for help  or 'exit' to close program\r\n" +
+                "Bye!\r\n" +
+                "_____________________________________________________________________\r\n";
         assertEquals(expectedStringExit, outString.toString());
     }
 
