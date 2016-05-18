@@ -1,5 +1,6 @@
 package rozborskyRoman.controller;
 
+
 import rozborskyRoman.model.DBManager;
 import rozborskyRoman.view.InputOutput;
 
@@ -18,7 +19,7 @@ public class Connector {
         try{
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e){
-            System.out.println("Can't getRows jdbc driver ");
+            System.out.println("Can't find jdbc driver ");
             throw new ExitException();
         }
     }
