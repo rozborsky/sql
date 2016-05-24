@@ -15,7 +15,7 @@ public class PrepareTable {
     private DBManager manager;
     private Console view;
 
-    public PrepareTable(){
+    public PrepareTable() {
         createDBManager();
         createConsole();
     }
@@ -28,31 +28,31 @@ public class PrepareTable {
         clear.process();
     }
 
-    public void insertValues(String insertedValue) {
-        Insert insert = new Insert(manager, view);
-        InputStream inputStream = new ByteArrayInputStream(insertedValue.getBytes());
+    public void insertValues(String insertedValue) throws SQLException {
+        Insert insert = new Insert(manager, view);InputStream inputStream = new ByteArrayInputStream(insertedValue.getBytes());
+
         System.setIn(inputStream);
         insert.process();
     }
 
-    private void createDBManager(){
+    private void createDBManager() {
         manager = new DBManager("public", "postgres", "mainuser", "jdbc:postgresql://localhost:5432/");
         try {
             manager.createConnection();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             //do noting
         }
     }
 
-    private void createConsole(){
+    private void createConsole() {
         view = new Console();
     }
 
-    public DBManager getManager(){
+    public DBManager getManager() {
         return manager;
     }
 
-    public Console getView(){
+    public Console getView() {
         return view;
     }
 }

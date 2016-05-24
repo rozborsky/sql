@@ -8,6 +8,7 @@ import rozborskyRoman.view.Console;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.sql.SQLException;
 
 import static org.junit.Assert.assertEquals;
 
@@ -18,12 +19,11 @@ public class InsertTest {
     private final ByteArrayOutputStream outString = new ByteArrayOutputStream();
     Console view;
     DBManager manager;
-    TableParameters tableParameters;
     Find find;
     PrepareTable prepareTable;
 
     @Before
-    public void setup(){
+    public void setup() {
         prepareTable = new PrepareTable();
         manager = prepareTable.getManager();
         view = prepareTable.getView();
@@ -34,20 +34,18 @@ public class InsertTest {
     }
 
     @Test
-    public void notCorrectId(){
+    public void notCorrectId() throws SQLException {
         prepareTable.clearTable();
         prepareTable.insertValues("a|1|1");
-        tableParameters = new TableParameters(manager, view);
-        int row = tableParameters.getHeight();
+        int row = manager.getTableHight();
         assertEquals(0, row);
     }
 
     @Test
-    public void correctId(){
+    public void correctId() throws SQLException {
         prepareTable.clearTable();
-        prepareTable.insertValues("1|1|1");
-        prepareTable.insertValues("2|2|2");
-        tableParameters = new TableParameters(manager, view);
+        prepareTable.insertValues("1|1|1\r\n");
+        prepareTable.insertValues("2|2|2\r\n");
         find.process();
         String expectedString = "Are you sure you want to clear the table 'user'? Yes - press 'y', no - press 'n'\r\n" +
                 "Table 'user' was cleared\r\n" +

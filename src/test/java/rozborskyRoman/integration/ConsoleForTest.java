@@ -12,8 +12,8 @@ import java.util.Scanner;
 public class ConsoleForTest implements InputOutput {
 
     public void write(String message) {
-            System.out.println(message);
-        }
+        System.out.println(message);
+    }
 
     public void error(String message, Exception exception) {
         System.out.println(String.format(message + exception));

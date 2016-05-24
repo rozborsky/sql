@@ -14,7 +14,7 @@ public class Find extends Command {
     private DBManager manager;
     private String line = "_____________________________________________________________________";
 
-    public Find(DBManager manager, InputOutput view){
+    public Find(DBManager manager, InputOutput view) {
         this.manager = manager;
         this.view = view;
     }
@@ -26,36 +26,40 @@ public class Find extends Command {
 
     @Override
     public void process() {
-        TableParameters table = new TableParameters(manager, view);
-        int numberOfRows = table.getHeight();
-        String [] rows;
+        int numberOfRows = 0;
+        try{
+            numberOfRows = manager.getTableHight();
+        }catch (SQLException e){
+/////////////////////////////// TODO: 23.05.2016
+        }
 
         if (numberOfRows != 0) {
             view.write("\n\n" + line);
             view.write(manager.getTable());
             view.write(line);
             try {
-                rows = manager.getRows();
+                String[] rows = manager.getRows();
                 for (int i = 0; i < rows.length; i++) {
                     view.write(formatRow(rows[i]));
                     view.write(line);
                 }
-            }catch (SQLException e){
+            } catch (SQLException e) {
                 view.error("Cant show table '" + manager.getTable() + "' ", e);
             }
 
-        }else{
+        } else {
             view.write("\n\n" + line);
             view.write("table '" + manager.getTable() + "' is empty");
             view.write(line);
         }
     }
 
-    private String formatRow(String value){
-        String [] part = value.split("\\|");
+    private String formatRow(String value) {
+        String[] part = value.split("\\|");
         String row = "";
         for (int i = 0; i < part.length; i++) {
-            row += String.format("%-21s",part[i]);;
+            row += String.format("%-21s", part[i]);
+            ;
         }
         return row;
     }

@@ -10,6 +10,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.sql.SQLException;
 
 import static org.junit.Assert.assertEquals;
 
@@ -24,7 +25,7 @@ public class UpdateTest {
     PrepareTable prepareTable;
 
     @Before
-    public void setup(){
+    public void setup() throws SQLException {
         prepareTable = new PrepareTable();
         manager = prepareTable.getManager();
         view = prepareTable.getView();
@@ -33,15 +34,15 @@ public class UpdateTest {
         System.setOut(new PrintStream(outString));
         find = new Find(manager, view);
         prepareTable.clearTable();
-        prepareTable.insertValues("1|1|1");
-        prepareTable.insertValues("2|2|2");
-        prepareTable.insertValues("3|3|3");
+        prepareTable.insertValues("1|1|1\r\n");
+        prepareTable.insertValues("2|2|2\r\n");
+        prepareTable.insertValues("3|3|3\r\n");
     }
 
     @Test
-    public void notExistId(){
+    public void notExistId() throws SQLException {
         Update update = new Update(manager, view);
-        String id = "4|4|4";
+        String id = "4|4|4\r\n";
         InputStream inputStream = new ByteArrayInputStream(id.getBytes());
         System.setIn(inputStream);
         update.process();
@@ -66,9 +67,9 @@ public class UpdateTest {
     }
 
     @Test
-    public void existId(){
+    public void existId() throws SQLException {
         Update update = new Update(manager, view);
-        String id = "2|5|5";
+        String id = "2|5|5\r\n";
         InputStream inputStream = new ByteArrayInputStream(id.getBytes());
         System.setIn(inputStream);
         update.process();

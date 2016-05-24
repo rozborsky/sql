@@ -3,10 +3,10 @@ package rozborskyRoman.controller;
 
 import rozborskyRoman.view.InputOutput;
 
-public class Exit extends Command{
+public class Exit extends Command {
     private InputOutput view;
 
-    public Exit(InputOutput view){
+    public Exit(InputOutput view) {
         this.view = view;
     }
 
@@ -16,7 +16,7 @@ public class Exit extends Command{
     }
 
     @Override
-    public void process(){
+    public void process() {
         exit();
     }
 
@@ -25,7 +25,7 @@ public class Exit extends Command{
         return "'exit' - for exit from the program";
     }
 
-    private void exit(){
+    private void exit() {
         view.write("Bye!\n_____________________________________________________________________");
         throw new ExitException();
     }

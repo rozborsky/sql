@@ -9,7 +9,7 @@ import rozborskyRoman.view.Console;
  */
 public class ExitTest {
     @Test(expected = ExitException.class)
-    public void process(){
+    public void process() {
         Console view = new Console();
         Exit exit = new Exit(view);
         exit.process();

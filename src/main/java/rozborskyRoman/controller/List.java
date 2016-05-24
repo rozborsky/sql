@@ -12,7 +12,7 @@ public class List extends Command {
     private DBManager manager;
     private InputOutput view;
 
-    public List(DBManager manager, String[] tables, InputOutput view){
+    public List(DBManager manager, String[] tables, InputOutput view) {
         this.manager = manager;
         this.tables = tables;
         this.view = view;
@@ -28,15 +28,14 @@ public class List extends Command {
         showTables();
     }
 
-    private void showTables(){
-        if (tables.length == 0){
+    private void showTables() {
+        if (tables.length == 0) {
             view.write("\nDatabase '" + manager.getDatabase() + "' hasn't tables");
-        }
-        else{
+        } else {
             String tableList = "[";
             for (int i = 0; i < tables.length; i++) {
                 tableList += tables[i];
-                if (i != tables.length - 1){
+                if (i != tables.length - 1) {
                     tableList += ", ";
                 }
             }

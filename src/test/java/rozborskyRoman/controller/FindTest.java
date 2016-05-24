@@ -8,6 +8,7 @@ import rozborskyRoman.view.Console;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.sql.SQLException;
 
 import static org.junit.Assert.assertEquals;
 
@@ -21,7 +22,7 @@ public class FindTest {
     PrepareTable prepareTable;
 
     @Before
-    public void setup(){
+    public void setup() {
         prepareTable = new PrepareTable();
         manager = prepareTable.getManager();
         view = prepareTable.getView();
@@ -32,7 +33,7 @@ public class FindTest {
     }
 
     @Test
-    public void emptyTable(){
+    public void emptyTable() {
         Find find = new Find(manager, view);
         find.process();
         String expectedString = "Are you sure you want to clear the table 'user'? Yes - press 'y', no - press 'n'\r\n" +
@@ -46,10 +47,10 @@ public class FindTest {
     }
 
     @Test
-    public void tableWithValues(){
-        prepareTable.insertValues("1|1|1");
-        prepareTable.insertValues("2|2|2");
-        prepareTable.insertValues("3|3|3");
+    public void tableWithValues() throws SQLException {
+        prepareTable.insertValues("1|1|1\r\n");
+        prepareTable.insertValues("2|2|2\r\n");
+        prepareTable.insertValues("3|3|3\r\n");
         Find find = new Find(manager, view);
         find.process();
         String expectedString = "Are you sure you want to clear the table 'user'? Yes - press 'y', no - press 'n'\r\n" +

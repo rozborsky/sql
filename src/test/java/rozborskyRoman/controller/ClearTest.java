@@ -8,6 +8,7 @@ import rozborskyRoman.view.Console;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.sql.SQLException;
 
 import static org.junit.Assert.*;
 
@@ -17,35 +18,32 @@ import static org.junit.Assert.*;
 public class ClearTest {
     Console view;
     DBManager manager;
-    TableParameters tableParameters;
     PrepareTable prepareTable;
 
     @Before
-    public void setup(){
+    public void setup() throws SQLException {
         prepareTable = new PrepareTable();
         manager = prepareTable.getManager();
         view = prepareTable.getView();
         manager.setTable("user");
 
         prepareTable.clearTable();
-        prepareTable.insertValues("1|1|1");
-        prepareTable.insertValues("2|2|2");
-        prepareTable.insertValues("3|3|3");
+        prepareTable.insertValues("1|1|1\r\n");
+        prepareTable.insertValues("2|2|2\r\n");
+        prepareTable.insertValues("3|3|3\r\n");
     }
 
     @Test
-    public void proces(){
-        tableParameters = new TableParameters(manager, view);
-        assertTrue("Can't start test - table is empty", tableParameters.getHeight() >= 1);
+    public void proces() throws SQLException {
+        assertTrue("Can't start test - table is empty", manager.getTableHight() >= 1);
 
         Clear clear = new Clear(manager, view);
-        String confirmation = "y";
+        String confirmation = "y\r\n";
         InputStream iStream = new ByteArrayInputStream(confirmation.getBytes());
         System.setIn(iStream);
         clear.process();
 
-        tableParameters = new TableParameters(manager, view);
-        int hight = tableParameters.getHeight();
+        int hight = manager.getTableHight();
         assertEquals(0, hight);
     }
 }

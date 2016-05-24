@@ -10,40 +10,41 @@ public class Delete extends Command {
     private InputOutput view;
     private DBManager manager;
 
-    public Delete(DBManager manager, InputOutput view){
+    public Delete(DBManager manager, InputOutput view) {
         this.manager = manager;
         this.view = view;
     }
 
     @Override
     public void process() {
-        TableParameters table = new TableParameters(manager, view);
         String command;
         do {
-            view.write("\nInsert "+ table.getColumns()[0] + " row, that should be removed, " +
-                    "'back' to enter another command or 'exit' to close program");
-            command = view.read();
-            try{
+            try {
+                view.write("\nInsert " + manager.getColumnNames()[0] + " row, that should be removed, " +
+                        "'back' to enter another command or 'exit' to close program");
+                command = view.read();
+                if (command.equals("back")){
+                    return;
+                }
                 int id = Integer.parseInt(command);
-                if (manager.isExists(id)){
+                if (manager.isExists(id)) {
                     try {
-                        if (manager.delete(command)){
+                        if (manager.delete(command)) {
                             view.write("Row was removed");
                             return;
                         }
-                    }catch (SQLException e){
+                    } catch (SQLException e) {
                         view.error("Cant delete row", e);
                     }
-                }
-                else{
-                    if (!command.equals("back")){
+                } else {
+                    if (!command.equals("back")) {
                         view.write("String does not exist");
                     }
                 }
-            }catch(Exception e){
+            } catch (Exception e) {
                 view.write("Insert correct id");
             }
-        }while(!command.equals("back"));
+        } while (true);
     }
 
     @Override

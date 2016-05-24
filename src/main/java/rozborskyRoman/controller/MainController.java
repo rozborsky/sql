@@ -1,6 +1,5 @@
 package rozborskyRoman.controller;
 
-
 import rozborskyRoman.model.DBManager;
 import rozborskyRoman.view.InputOutput;
 
@@ -8,15 +7,21 @@ import java.sql.SQLException;
 
 public class MainController {
     private InputOutput view = null;
-    private Command [] commands;
+    private Command[] commands;
     private DBManager manager;
     private String[] tables;
-    private WorkWithTables workWithTables;
 
-    public MainController(InputOutput view){
+    public MainController(InputOutput view) {
         this.view = view;
-        view.write("SQLCMD manager");
+    }
 
+    public void action() {
+        view.write("SQLCMD manager\n");
+        preparation();
+        inputCommand();
+    }
+
+    private void preparation() {
         Connector connector = new Connector();
         manager = connector.createConnection(view);
 
@@ -35,20 +40,20 @@ public class MainController {
         help.addCommands(commands);
     }
 
-    public void action(){
+    private void inputCommand() {
         String command;
 
-        while(true){
-            view.write("Insert 'list' to show available tables, 'help' for help  or 'exit' to close program");
+        while (true) {
+            view.write("Insert 'list' to show available tables, 'help' for help or 'exit' to close program");
             command = view.read();
 
-            if (checkCommand(command, commands)){
-                workWithTables = new WorkWithTables(commands, tables, manager, view);
-                if (command.equals("help")){
+            if (checkingCommand(command, commands)) {
+                WorkWithTables workWithTables = new WorkWithTables(commands, tables, manager, view);
+                if (command.equals("help")) {
                     continue;
                 }
                 workWithTables.chooseTable();
-            }else{
+            } else {
                 view.write("Wrong command\n");
                 continue;
             }
@@ -56,19 +61,23 @@ public class MainController {
         }
     }
 
-    private void findAvailableTables(){
+    private void findAvailableTables() {
         try {
             this.tables = manager.list();
         } catch (SQLException e) {
-            view.error("Can't show tables",e);
+            view.error("Can't show tables", e);
         }
     }
 
-    private boolean checkCommand(String enteredCommand, Command [] commands){
-        for (Command availableCommands : commands){
-            if (availableCommands.format().equals(enteredCommand)){
-                if (enteredCommand.equals("list") || enteredCommand.equals("help") || enteredCommand.equals("exit")){
-                    availableCommands.process();
+    private boolean checkingCommand(String enteredCommand, Command[] commands) {
+        for (Command availableCommands : commands) {
+            if (availableCommands.format().equals(enteredCommand)) {
+                if (enteredCommand.equals("list") || enteredCommand.equals("help") || enteredCommand.equals("exit")) {
+                    try {
+                        availableCommands.process();
+                    } catch (SQLException e) {
+                        /////////////////////////////////TODO
+                    }
                     return true;
                 }
             }

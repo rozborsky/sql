@@ -22,7 +22,7 @@ public class ListTest {
     PrepareTable prepareTable;
 
     @Before
-    public void setup(){
+    public void setup() {
         prepareTable = new PrepareTable();
         manager = prepareTable.getManager();
         view = prepareTable.getView();
@@ -30,8 +30,8 @@ public class ListTest {
     }
 
     @Test
-        public void process(){
-        String [] tables = {"user", "test", "enotherTest"};
+    public void process() {
+        String[] tables = {"user", "test", "enotherTest"};
         List list = new List(manager, tables, view);
         list.process();
         String expectedString = "\nAvailable tables:\r\n[user, test, enotherTest]\r\n";

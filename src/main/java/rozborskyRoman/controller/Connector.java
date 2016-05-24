@@ -15,26 +15,26 @@ public class Connector {
 
     private String url = null;
 
-    static{
-        try{
+    static {
+        try {
             Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e){
+        } catch (ClassNotFoundException e) {
             System.out.println("Can't find jdbc driver ");
             throw new ExitException();
         }
     }
 
-    public DBManager createConnection(InputOutput view){
-
+    public DBManager createConnection(InputOutput view) {
         url = getUrl(view);
-
         boolean isConnect = false;
         DBManager manager = null;
-        do{
-            view.write("\nFor the database connection, enter the information in the format 'database_name|user_name|password'");
-            String [] insertedValues;
+
+        do {
+            view.write("To connect to the database, enter the information in the format 'database_name|user_name|password'\n");
+            String[] insertedValues;
             insertedValues = view.read().split("\\|");
-            if (insertedValues.length != 3){
+
+            if (insertedValues.length != 3) {
                 continue;
             }
             String database = insertedValues[0];
@@ -42,23 +42,25 @@ public class Connector {
             String password = insertedValues[2];
 
             manager = new DBManager(database, userName, password, url);
-            try{
+
+            try {
                 manager.createConnection();
-                view.write(String.format("\nConnect to the database '%s' succesful\n", database));
+                view.write(String.format("Connect to the database '%s' successful\n", database));
                 isConnect = true;
-            }catch (SQLException e){
-                view.error(String.format("\nCan't connect to the database '%s' \n", database), e);
+            } catch (SQLException e) {
+                view.error(String.format("Can't connect to the database '%s' \n", database), e);
             }
-        }while(!isConnect);
+        } while (!isConnect);
         return manager;
     }
 
     private String getUrl(InputOutput view) {
         InputStream input = getClass().getClassLoader().getResourceAsStream("config.properties");
         Properties property = new Properties();
-        try{
+
+        try {
             property.load(input);
-        }catch (Exception e){
+        } catch (Exception e) {
             view.error("Can't find property file ", e);
             throw new ExitException();
         }

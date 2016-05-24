@@ -9,6 +9,7 @@ import rozborskyRoman.view.Console;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.sql.SQLException;
 
 import static org.junit.Assert.assertFalse;
 
@@ -22,7 +23,7 @@ public class DeleteTest {
     PrepareTable prepareTable;
 
     @Before
-    public void setup(){
+    public void setup() {
         prepareTable = new PrepareTable();
         manager = prepareTable.getManager();
         view = prepareTable.getView();
@@ -32,10 +33,10 @@ public class DeleteTest {
     }
 
     @Test
-    public void process(){
-        prepareTable.insertValues("1|1|1");
-        prepareTable.insertValues("2|2|2");
-        prepareTable.insertValues("3|3|3");
+    public void process() throws SQLException {
+        prepareTable.insertValues("1|1|1\r\n");
+        prepareTable.insertValues("2|2|2\r\n");
+        prepareTable.insertValues("3|3|3\r\n");
         Delete delete = new Delete(manager, view);
         String idRow = "3";
         InputStream iStream = new ByteArrayInputStream(idRow.getBytes());

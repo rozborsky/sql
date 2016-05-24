@@ -19,23 +19,22 @@ public class Update extends Insert {
     }
 
     @Override
-     public void request(String columns, String enteredValues) {
+    protected void request(String columns, String enteredValues) throws SQLException{
 
-        if (manager.isExists(Integer.parseInt(enteredData[0]))){
-            String columnsInRequest = columns(tableParameters.getColumns(), " = ?, ");
+        if (manager.isExists(Integer.parseInt(enteredData[0]))) {
+            String columnsInRequest = columns(manager.getColumnNames(), " = ?, ");
             int splitPosition = columnsInRequest.indexOf(',');
             String idColunm = columnsInRequest.substring(0, splitPosition);
             String changedColumns = columnsInRequest.substring(splitPosition + 2, columnsInRequest.length());
 
-            try{
+            try {
                 manager.update(idColunm, changedColumns, enteredData);
                 view.write(String.format("Table '%s' was updated", table));
-            }catch (SQLException e){
+            } catch (SQLException e) {
                 view.error("Can't update the table\n", e);
             }
-        }
-        else {
-            view.write("Can't update the table, row with entered " + tableParameters.getColumns()[0] + " is not exist");
+        } else {
+            view.write("Can't update the table, row with entered " + manager.getColumnNames()[0] + " is not exist");
         }
     }
 

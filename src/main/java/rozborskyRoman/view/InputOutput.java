@@ -6,6 +6,8 @@ package rozborskyRoman.view;
  */
 public interface InputOutput {
     public void write(String message);
+
     public void error(String message, Exception exception);
+
     public String read();
 }
