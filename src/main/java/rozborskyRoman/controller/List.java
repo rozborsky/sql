@@ -1,6 +1,5 @@
 package rozborskyRoman.controller;
 
-
 import rozborskyRoman.model.DBManager;
 import rozborskyRoman.view.*;
 

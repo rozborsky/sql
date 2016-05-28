@@ -1,6 +1,5 @@
 package rozborskyRoman.controller;
 
-
 import rozborskyRoman.model.DBManager;
 import rozborskyRoman.view.Console;
 
@@ -20,7 +19,7 @@ public class PrepareTable {
         createConsole();
     }
 
-    public void clearTable() {
+    public void clearTable() throws SQLException {
         Clear clear = new Clear(manager, view);
         String confirmation = "y";
         InputStream iStream = new ByteArrayInputStream(confirmation.getBytes());

@@ -1,6 +1,5 @@
 package rozborskyRoman.controller;
 
-
 import rozborskyRoman.model.DBManager;
 import rozborskyRoman.view.InputOutput;
 
@@ -25,32 +24,28 @@ public class Find extends Command {
     }
 
     @Override
-    public void process() {
-        int numberOfRows = 0;
-        try{
+    public void process() throws SQLException {
+        int numberOfRows;
+        try {
             numberOfRows = manager.getTableHight();
-        }catch (SQLException e){
-/////////////////////////////// TODO: 23.05.2016
-        }
 
-        if (numberOfRows != 0) {
-            view.write("\n\n" + line);
-            view.write(manager.getTable());
-            view.write(line);
-            try {
+            if (numberOfRows != 0) {
+                view.write("\n\n" + line);
+                view.write(manager.getTable());
+                view.write(line);
+
                 String[] rows = manager.getRows();
                 for (int i = 0; i < rows.length; i++) {
                     view.write(formatRow(rows[i]));
                     view.write(line);
                 }
-            } catch (SQLException e) {
-                view.error("Cant show table '" + manager.getTable() + "' ", e);
+            } else {
+                view.write("\n\n" + line);
+                view.write("table '" + manager.getTable() + "' is empty");
+                view.write(line);
             }
-
-        } else {
-            view.write("\n\n" + line);
-            view.write("table '" + manager.getTable() + "' is empty");
-            view.write(line);
+        } catch (SQLException e) {
+            throw new SQLException((String.format("Cant show table '%s'\n", manager.getTable()) + e.getMessage()));
         }
     }
 

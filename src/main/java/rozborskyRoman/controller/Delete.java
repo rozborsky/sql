@@ -1,6 +1,5 @@
 package rozborskyRoman.controller;
 
-
 import rozborskyRoman.model.DBManager;
 import rozborskyRoman.view.InputOutput;
 
@@ -16,25 +15,27 @@ public class Delete extends Command {
     }
 
     @Override
-    public void process() {
+    public void process() throws SQLException {
         String command;
         do {
             try {
                 view.write("\nInsert " + manager.getColumnNames()[0] + " row, that should be removed, " +
                         "'back' to enter another command or 'exit' to close program");
                 command = view.read();
-                if (command.equals("back")){
+                if (command.equals("back")) {
                     return;
                 }
-                int id = Integer.parseInt(command);
+                int id;
+                try {
+                    id = Integer.parseInt(command);
+                } catch (Exception e) {
+                    view.write("Insert correct id");
+                    continue;
+                }
                 if (manager.isExists(id)) {
-                    try {
-                        if (manager.delete(command)) {
-                            view.write("Row was removed");
-                            return;
-                        }
-                    } catch (SQLException e) {
-                        view.error("Cant delete row", e);
+                    if (manager.delete(command)) {
+                        view.write("Row was removed");
+                        return;
                     }
                 } else {
                     if (!command.equals("back")) {
@@ -42,7 +43,8 @@ public class Delete extends Command {
                     }
                 }
             } catch (Exception e) {
-                view.write("Insert correct id");
+                String message = (String.format("Cant delete row in table '%s'\n", manager.getTable()));
+                throw new SQLException(message + e.getMessage());
             }
         } while (true);
     }

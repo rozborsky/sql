@@ -1,6 +1,5 @@
 package rozborskyRoman.controller;
 
-
 import rozborskyRoman.model.DBManager;
 import rozborskyRoman.view.InputOutput;
 
@@ -71,7 +70,7 @@ public class Insert extends Command {
             view.write(String.format("\nTable '%s' was updated", table));
 
         } catch (SQLException e) {
-            throw new SQLException("Can't insert values into the '" + table + "' ", e);
+            throw new SQLException((String.format("Cant insert values in to the table '%s'\n", manager.getTable()) + e.getMessage()));
         }
     }
 

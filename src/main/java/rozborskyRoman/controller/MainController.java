@@ -48,10 +48,10 @@ public class MainController {
             command = view.read();
 
             if (checkingCommand(command, commands)) {
-                WorkWithTables workWithTables = new WorkWithTables(commands, tables, manager, view);
                 if (command.equals("help")) {
                     continue;
                 }
+                WorkWithTables workWithTables = new WorkWithTables(commands, tables, manager, view);
                 workWithTables.chooseTable();
             } else {
                 view.write("Wrong command\n");
@@ -65,7 +65,7 @@ public class MainController {
         try {
             this.tables = manager.list();
         } catch (SQLException e) {
-            view.error("Can't show tables", e);
+            view.error("Can't show tables\n", e);
         }
     }
 
@@ -76,7 +76,7 @@ public class MainController {
                     try {
                         availableCommands.process();
                     } catch (SQLException e) {
-                        /////////////////////////////////TODO
+                        view.error(String.format("Cant execute command '%s'\n", enteredCommand), e);
                     }
                     return true;
                 }

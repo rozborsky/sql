@@ -1,6 +1,5 @@
 package rozborskyRoman.model;
 
-
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -31,7 +30,7 @@ public class DBManagerTest {
     }
 
     @Before
-    public void before() {
+    public void before() throws SQLException {
         prepareTable.clearTable();
     }
 

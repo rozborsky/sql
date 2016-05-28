@@ -1,6 +1,5 @@
 package rozborskyRoman.model;
 
-
 import java.sql.*;
 
 /**

@@ -1,6 +1,5 @@
 package rozborskyRoman.view;
 
-
 import java.util.Scanner;
 
 public class Console implements InputOutput{
@@ -9,7 +8,7 @@ public class Console implements InputOutput{
     }
 
     public void error(String message, Exception exception) {
-        System.out.println(String.format(message + exception));
+        System.out.println(message + exception);
     }
 
     public String read() {

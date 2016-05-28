@@ -1,6 +1,5 @@
 package rozborskyRoman.controller;
 
-
 import rozborskyRoman.model.DBManager;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +21,7 @@ public class FindTest {
     PrepareTable prepareTable;
 
     @Before
-    public void setup() {
+    public void setup() throws SQLException {
         prepareTable = new PrepareTable();
         manager = prepareTable.getManager();
         view = prepareTable.getView();
@@ -33,7 +32,7 @@ public class FindTest {
     }
 
     @Test
-    public void emptyTable() {
+    public void emptyTable() throws SQLException {
         Find find = new Find(manager, view);
         find.process();
         String expectedString = "Are you sure you want to clear the table 'user'? Yes - press 'y', no - press 'n'\r\n" +

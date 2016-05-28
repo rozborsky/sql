@@ -1,6 +1,5 @@
 package rozborskyRoman.controller;
 
-
 import rozborskyRoman.model.DBManager;
 import rozborskyRoman.view.InputOutput;
 
@@ -16,7 +15,7 @@ public class Clear extends Command {
     }
 
     @Override
-    public void process() {
+    public void process() throws SQLException {
         String command;
 
         do {
@@ -31,7 +30,7 @@ public class Clear extends Command {
                         return;
                     }
                 } catch (SQLException e) {
-                    view.error(String.format("Can't clear table '%s'", manager.getTable()), e);
+                    throw new SQLException((String.format("Cant clear table '%s'\n", manager.getTable()) + e.getMessage()));
                 }
             }
         } while (!"n".equals(command) && !"back".equals(command));

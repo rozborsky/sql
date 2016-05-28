@@ -1,6 +1,5 @@
 package rozborskyRoman.controller;
 
-
 import rozborskyRoman.model.DBManager;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +22,7 @@ public class DeleteTest {
     PrepareTable prepareTable;
 
     @Before
-    public void setup() {
+    public void setup() throws SQLException {
         prepareTable = new PrepareTable();
         manager = prepareTable.getManager();
         view = prepareTable.getView();

@@ -1,6 +1,5 @@
 package rozborskyRoman.controller;
 
-
 import org.junit.Test;
 import rozborskyRoman.view.Console;
 

@@ -1,6 +1,5 @@
 package rozborskyRoman.controller;
 
-
 import java.sql.SQLException;
 
 public abstract class Command {

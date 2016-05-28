@@ -1,6 +1,5 @@
 package rozborskyRoman.controller;
 
-
 import rozborskyRoman.model.DBManager;
 import rozborskyRoman.view.InputOutput;
 
@@ -19,22 +18,21 @@ public class Update extends Insert {
     }
 
     @Override
-    protected void request(String columns, String enteredValues) throws SQLException{
+    protected void request(String columns, String enteredValues) throws SQLException {
+        try {
+            if (manager.isExists(Integer.parseInt(enteredData[0]))) {
+                String columnsInRequest = columns(manager.getColumnNames(), " = ?, ");
+                int splitPosition = columnsInRequest.indexOf(',');
+                String idColunm = columnsInRequest.substring(0, splitPosition);
+                String changedColumns = columnsInRequest.substring(splitPosition + 2, columnsInRequest.length());
 
-        if (manager.isExists(Integer.parseInt(enteredData[0]))) {
-            String columnsInRequest = columns(manager.getColumnNames(), " = ?, ");
-            int splitPosition = columnsInRequest.indexOf(',');
-            String idColunm = columnsInRequest.substring(0, splitPosition);
-            String changedColumns = columnsInRequest.substring(splitPosition + 2, columnsInRequest.length());
-
-            try {
                 manager.update(idColunm, changedColumns, enteredData);
                 view.write(String.format("Table '%s' was updated", table));
-            } catch (SQLException e) {
-                view.error("Can't update the table\n", e);
+            } else {
+                view.write("Can't update the table, row with entered " + manager.getColumnNames()[0] + " is not exist");
             }
-        } else {
-            view.write("Can't update the table, row with entered " + manager.getColumnNames()[0] + " is not exist");
+        } catch (SQLException e) {
+            throw new SQLException((String.format("Cant update table '%s'\n", manager.getTable()) + e.getMessage()));
         }
     }
 

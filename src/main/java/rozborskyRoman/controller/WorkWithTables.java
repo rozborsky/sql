@@ -1,6 +1,5 @@
 package rozborskyRoman.controller;
 
-
 import rozborskyRoman.model.DBManager;
 import rozborskyRoman.view.InputOutput;
 
@@ -64,7 +63,7 @@ public class WorkWithTables {
                     try{
                         availableCommand.process();
                     }catch (SQLException e){
-                        view.error("e",e);//TODO
+                        view.error(String.format("Cant execute command %s\n", command), e);
                     }
                     isExecute = true;
                 }

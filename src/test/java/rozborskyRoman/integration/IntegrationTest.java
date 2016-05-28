@@ -1,6 +1,5 @@
 package rozborskyRoman.integration;
 
-
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;

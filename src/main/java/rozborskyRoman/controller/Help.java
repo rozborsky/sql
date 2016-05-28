@@ -1,6 +1,5 @@
 package rozborskyRoman.controller;
 
-
 import rozborskyRoman.view.InputOutput;
 
 public class Help extends Command {
