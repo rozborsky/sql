@@ -35,7 +35,7 @@ public class TableParameters {
     }
 
     private void getColumnNames() throws SQLException {
-            this.columns = manager.getColumnNames(width);
+            this.columns = manager.getColumnNames();
     }
 
     public int getWidth(){

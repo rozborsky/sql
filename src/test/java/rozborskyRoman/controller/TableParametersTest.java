@@ -7,6 +7,7 @@ import org.junit.Test;
 import rozborskyRoman.view.Console;
 
 import java.io.ByteArrayInputStream;
+import java.sql.SQLException;
 
 import static org.junit.Assert.*;
 
@@ -20,7 +21,7 @@ public class TableParametersTest {
     PrepareTable prepareTable;
 
     @Before
-    public void setup(){
+    public void setup() throws SQLException {
         prepareTable = new PrepareTable();
         manager = prepareTable.getManager();
         view = prepareTable.getView();
@@ -50,7 +51,7 @@ public class TableParametersTest {
         assertArrayEquals(columns, tableParameters.getColumns());
     }
 
-    private void insertValues() {
+    private void insertValues() throws SQLException {
         Insert insert = new Insert(manager, view);
         String insertedValue = "";
         insertedValue += "1|1|1";
